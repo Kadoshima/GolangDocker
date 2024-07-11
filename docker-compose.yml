@@ -7,3 +7,19 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/app
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=test_db
+      - MYSQL_ROOT_PASSWORD=pass
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --innodb_file_per_table
+      --innodb_file_format=BARRACUDA
+      --innodb_large_prefix=1
+    ports:
+      - 3306:3306
