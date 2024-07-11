@@ -1,0 +1,27 @@
+# .air.toml
+
+# Config file for air.
+# See https://github.com/cosmtrek/air for more details.
+
+[build]
+  # Set working directory
+  cmd = "go build -o ./bin/app ./src"
+  bin = "./bin/app"
+  full_bin = "APP_BIN"
+  delay = 2000
+  kill_delay = 3000
+  exclude_dir = ["tmp", "vendor", "bin"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_ext = ["go"]
+  exclude_regex = ["_test.go"]
+
+[log]
+  level = "debug"
+  color = true
+  timestamp = false
+
+[serve]
+  cmd = "./bin/app"
+  delay = 1000
+  grace = 5000
+  exclude_regex = ["_test.go"]
