@@ -11,4 +11,4 @@ RUN apk add --no-cache musl-dev
 
 COPY ./backend .
 
-CMD ["go", "run", "./cmd/api"]
+CMD ["go", "run", "main.go"]
