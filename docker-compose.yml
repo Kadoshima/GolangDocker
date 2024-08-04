@@ -23,3 +23,15 @@ services:
       --innodb_large_prefix=1
     ports:
       - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    depends_on:
+      - db
