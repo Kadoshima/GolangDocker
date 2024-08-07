@@ -11,15 +11,26 @@ services:
       - db
   
   db:
-    image: mysql:5.7
+    image: mysql:8.0
+    platform: linux/x86_64
     environment:
       - MYSQL_DATABASE=test_db
       - MYSQL_ROOT_PASSWORD=pass
     command: >
-      --character-set-server=utf8mb4
+      --character-set-server=utf8mb4z
       --collation-server=utf8mb4_general_ci
-      --innodb_file_per_table
-      --innodb_file_format=BARRACUDA
-      --innodb_large_prefix=1
+      --innodb_file_per_table=1
     ports:
       - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    depends_on:
+      - db
