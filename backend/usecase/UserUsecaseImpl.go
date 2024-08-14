@@ -6,13 +6,13 @@ import (
 )
 
 type UserUsecaseImpl struct {
-	UserRepositoryInterface *repository.UserRepositoryInterface
+	UserRepository repository.UserRepository
 }
 
 func (uu *UserUsecaseImpl) CreateUser(user *domain.User) error {
 
 	// リポジトリを使ってユーザーを保存
-	if err := uu.UserRepositoryInterface.Save(user); err != nil {
+	if err := uu.UserRepository.Save(user); err != nil {
 		return err
 	}
 

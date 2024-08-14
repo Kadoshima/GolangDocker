@@ -5,7 +5,7 @@ import (
 )
 
 // インターフェースを実装
-type UserUsecaseInterface interface {
+type UserUsecase interface {
 	CreateUser(user *domain.User) error
 	// UserInfoGet(userId int) error
 	// UserInfoUpdate(user *domain.User) error
