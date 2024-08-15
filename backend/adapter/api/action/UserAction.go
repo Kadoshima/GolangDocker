@@ -1,14 +1,14 @@
 package action
 
 import (
-	"encoding/json"
-	"net/http"
-
 	"backend/domain"
 	"backend/usecase"
+	"encoding/json"
+	"log"
+	"net/http"
 )
 
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -16,15 +16,23 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	var user domain.User
 
-	var UserUsecase usecase.UserUsecase
-	if err := UserUsecase.CreateUser(&user); err != nil {
-		http.Error(w, "UserUsecase Error", http.StatusBadRequest)
+	// JSONリクエストボディからuser構造体をデコードする
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
 	}
 
+	//UserUseCaseを使ってユーザーを作成
+	if err := userUseCase.CreateUser(&user); err != nil {
+		log.Println(err)
+		http.Error(w, "Could not create user", http.StatusInternalServerError)
+		return
+	}
+
+	// 成功レスポンス
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{
-		"mesage": "User created successfully",
+		"message": "User created successfully",
 	})
-
 }

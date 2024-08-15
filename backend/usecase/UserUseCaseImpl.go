@@ -5,11 +5,15 @@ import (
 	"backend/domain"
 )
 
-type UserUsecaseImpl struct {
+type UserUseCaseImpl struct {
 	UserRepository repository.UserRepository
 }
 
-func (uu *UserUsecaseImpl) CreateUser(user *domain.User) error {
+func NewUserUseCase(userRepository repository.UserRepository) *UserUseCaseImpl {
+	return &UserUseCaseImpl{UserRepository: userRepository}
+}
+
+func (uu *UserUseCaseImpl) CreateUser(user *domain.User) error {
 
 	// リポジトリを使ってユーザーを保存
 	if err := uu.UserRepository.Save(user); err != nil {
