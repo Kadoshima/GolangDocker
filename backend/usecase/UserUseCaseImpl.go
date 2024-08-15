@@ -22,3 +22,14 @@ func (uu *UserUseCaseImpl) CreateUser(user *domain.User) error {
 
 	return nil
 }
+
+func (uu *UserUseCaseImpl) UserInfoGet(userID int) (string, error) {
+
+	res, err := uu.UserRepository.Select(userID)
+
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}

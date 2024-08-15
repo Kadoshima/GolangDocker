@@ -11,8 +11,13 @@ func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	// ユーザー作成ハンドラーの設定
-	mux.HandleFunc("/api/users", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/user", func(w http.ResponseWriter, r *http.Request) {
 		action.CreateUserHandler(w, r, userUseCase) // useCaseをハンドラーに渡す
+	})
+
+	// ユーザ情報の取得ハンドラーの設定
+	mux.HandleFunc("/api/user/InfoGet", func(w http.ResponseWriter, r *http.Request) {
+		action.GetUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
 	return mux

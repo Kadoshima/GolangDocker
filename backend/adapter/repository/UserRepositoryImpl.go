@@ -24,3 +24,17 @@ func (ur *UserRepositoryImpl) Save(user *domain.User) error {
 	}
 	return nil
 }
+
+func (ur *UserRepositoryImpl) Select(userID int) (studentId string, err error) {
+
+	var user domain.User
+
+	err = ur.db.QueryRow(
+		"SELECT id, student_id, nickname, email FROM `users` WHERE `id`=?", userID,
+	).Scan(&user.ID, &user.StudentID, &user.Nickname, &user.Email)
+
+	if err != nil {
+		return "", err
+	}
+	return user.StudentID, nil
+}
