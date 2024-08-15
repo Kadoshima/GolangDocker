@@ -2,6 +2,8 @@ package domain
 
 import (
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -14,4 +16,13 @@ type User struct {
 	CourseID     int
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+}
+
+func GeneratePass(pass string) ([]byte, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+	// byteのスライスを返す
+	return hash, nil
 }
