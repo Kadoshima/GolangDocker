@@ -23,13 +23,13 @@ func (uu *UserUseCaseImpl) CreateUser(user *domain.User) error {
 	return nil
 }
 
-func (uu *UserUseCaseImpl) UserInfoGet(userID int) (string, error) {
+func (uu *UserUseCaseImpl) UserInfoGet(userID int) (domain.User, error) {
 
 	res, err := uu.UserRepository.Select(userID)
 
 	if err != nil {
-		return "", err
+		return domain.User{}, err
 	}
 
-	return res, nil
+	return *res, nil
 }
