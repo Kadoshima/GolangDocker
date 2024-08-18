@@ -17,8 +17,6 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase useca
 
 	var user domain.User
 
-	println("hello")
-
 	// JSONリクエストボディからuser構造体をデコードする
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
