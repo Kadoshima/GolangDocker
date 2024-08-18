@@ -27,6 +27,7 @@ func (ur *UserRepositoryImpl) Save(user *domain.User) error {
 
 func (ur *UserRepositoryImpl) Select(userID int) (*domain.User, error) {
 
+	// domain.Userへのポインタ
 	user := &domain.User{}
 
 	err := ur.db.QueryRow(

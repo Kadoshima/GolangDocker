@@ -61,19 +61,23 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 	}
 
 	//UserUseCaseを使ってユーザーを作成
-	res, err := userUseCase.UserInfoGet(userID)
+	user, err := userUseCase.UserInfoGet(userID)
 	if err != nil {
 		http.Error(w, "Could not create user", http.StatusInternalServerError)
 		return
 	}
 
-	// resをmapに変換
-
 	// 成功レスポンス
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "User Info Get successfully",
-		"result":  res,
+		"status":        "I20400",
+		"message":       "User Info Get successfully",
+		"id":            user.ID,
+		"student_id":    user.StudentID,
+		"nickname":      user.Nickname,
+		"email":         user.Email,
+		"department_id": user.DepartmentID,
+		"course_id":     user.CourseID,
 	})
 }
