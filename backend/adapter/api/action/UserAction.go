@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
@@ -34,5 +35,45 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase useca
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "User created successfully",
+	})
+}
+
+func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var userIDStr string
+	var userID int
+
+	userIDStr = r.URL.Query().Get("userID")
+	if userIDStr == "" {
+		http.Error(w, "userID is required", http.StatusBadRequest)
+		return
+	}
+
+	// userIDをintに変換
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		return
+	}
+
+	//UserUseCaseを使ってユーザーを作成
+	res, err := userUseCase.UserInfoGet(userID)
+	if err != nil {
+		http.Error(w, "Could not create user", http.StatusInternalServerError)
+		return
+	}
+
+	// resをmapに変換
+
+	// 成功レスポンス
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message": "User Info Get successfully",
+		"result":  res,
 	})
 }
