@@ -28,8 +28,12 @@ func main() {
 	// ユースケースの初期化
 	userUseCase := usecase.NewUserUseCase(userRepo)
 
+	authRepo := repository.NewAuthRepository(db)
+	// ユースケースの初期化
+	authUseCase := usecase.NewAuthUseCase(userRepo, authRepo)
+
 	// ルートの設定（依存性注入）
-	r := router.SetupRouter(db, userUseCase)
+	r := router.SetupRouter(db, userUseCase, authUseCase)
 	log.Println("Starting server on :8000")
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatalf("Could not start server: %v", err)
