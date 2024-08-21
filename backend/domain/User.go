@@ -35,11 +35,15 @@ var DatabaseFields = dbmap{
 	"UpdatedAt":    "updated_at",
 }
 
-func GeneratePass(pass string) ([]byte, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+func (u *User) GeneratePass() error {
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return err
 	}
+
+	u.Password = string(hash)
+
 	// byteのスライスを返す
-	return hash, nil
+	return nil
 }

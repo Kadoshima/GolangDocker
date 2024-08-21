@@ -14,7 +14,12 @@ func NewUserRepository(db *sql.DB) *UserRepositoryImpl {
 	return &UserRepositoryImpl{db: db}
 }
 
-func (ur *UserRepositoryImpl) Save(user *domain.User) error {
+func (ur *UserRepositoryImpl) Create(user *domain.User) error {
+
+	user.GeneratePass()
+
+	println(user.Password)
+
 	_, err := ur.db.Exec(
 		"INSERT INTO `users`(`student_id`, `nickname`, `email`, `password`, `department_id`, `course_id`)"+
 			" VALUES (?, ?, ?, ?, ?, ?)",
