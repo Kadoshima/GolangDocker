@@ -3,6 +3,7 @@ package repository
 import (
 	"backend/domain"
 	"database/sql"
+	"fmt"
 )
 
 type UserRepositoryImpl struct {
@@ -38,4 +39,15 @@ func (ur *UserRepositoryImpl) Select(userID int) (*domain.User, error) {
 		return nil, err
 	}
 	return user, nil
+}
+
+func (ur *UserRepositoryImpl) Update(user *domain.User, sql string, sqlArgument []interface{}) error {
+	query := fmt.Sprintf("UPDATE `users` SET %s WHERE `id` = ?", sql)
+	sqlArgument = append(sqlArgument, user.ID)
+	_, err := ur.db.Exec(query, sqlArgument...)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }

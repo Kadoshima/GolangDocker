@@ -25,5 +25,9 @@ func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase, authUseCase usecas
 		action.LoginHandler(w, r, authUseCase) // useCaseをハンドラーに渡す
 	})
 
+	mux.HandleFunc("/api/user/InfoUpdate", func(w http.ResponseWriter, r *http.Request) {
+		action.UpdateUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
+	})
+
 	return mux
 }
