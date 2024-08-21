@@ -7,6 +7,7 @@ import (
 )
 
 type User struct {
+	//IDより前に新たな要素を追加するとUserInfoUpdateが機能しない
 	ID           int
 	StudentID    string
 	Nickname     string
@@ -16,6 +17,22 @@ type User struct {
 	CourseID     int
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+}
+
+// マップ型 db を定義
+type db map[string]string
+
+// マップの初期化
+var DatabaseFields = db{
+	"ID":           "id",
+	"StudentID":    "student_id",
+	"Nickname":     "nickname",
+	"Email":        "email",
+	"Password":     "password",
+	"DepartmentID": "department_id",
+	"CourseID":     "course_id",
+	"CreatedAt":    "created_at",
+	"UpdatedAt":    "updated_at",
 }
 
 func GeneratePass(pass string) ([]byte, error) {

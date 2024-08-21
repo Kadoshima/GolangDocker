@@ -63,7 +63,7 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 	//UserUseCaseを使ってユーザーを作成
 	user, err := userUseCase.UserInfoGet(userID)
 	if err != nil {
-		http.Error(w, "Could not create user", http.StatusInternalServerError)
+		http.Error(w, "No user", http.StatusInternalServerError)
 		return
 	}
 
@@ -79,5 +79,32 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 		"email":         user.Email,
 		"department_id": user.DepartmentID,
 		"course_id":     user.CourseID,
+	})
+}
+
+func UpdateUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
+	if r.Method != http.MethodPut {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var user domain.User
+
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if err := userUseCase.UserInfoUpdate(&user); err != nil {
+		log.Println(err)
+		http.Error(w, "Could not update user", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated) ///////////////////////////////////////////
+	json.NewEncoder(w).Encode(map[string]string{
+		// DBと比較していないので，DBと同じでも表示される
+		"message": "User information updated successfully",
 	})
 }
