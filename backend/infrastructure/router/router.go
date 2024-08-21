@@ -22,7 +22,7 @@ func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase, authUseCase usecas
 
 	// ユーザ情報の取得ハンドラーの設定
 	mux.HandleFunc("/api/user/login", func(w http.ResponseWriter, r *http.Request) {
-		action.LoginHandler(w, r, userUseCase, authUseCase) // useCaseをハンドラーに渡す
+		action.LoginHandler(w, r, authUseCase) // useCaseをハンドラーに渡す
 	})
 
 	return mux

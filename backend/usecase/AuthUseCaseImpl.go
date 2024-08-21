@@ -1,17 +1,43 @@
 package usecase
 
-import "backend/adapter/repository"
+import (
+	"backend/adapter/repository"
+	"backend/infrastructure/auth"
+	"errors"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type AuthUseCaseImpl struct {
-	UserRepository repository.UserRepository
 	AuthRepository repository.AuthRepository
+	JWTService     *auth.JWTService
 }
 
-func NewAuthUseCase(userRepository repository.UserRepository, authRepository repository.AuthRepository) *AuthUseCaseImpl {
-	return &AuthUseCaseImpl{UserRepository: userRepository, AuthRepository: authRepository}
+func NewAuthUseCase(authRepository repository.AuthRepository, jwtService *auth.JWTService) *AuthUseCaseImpl {
+	return &AuthUseCaseImpl{
+		AuthRepository: authRepository,
+		JWTService:     jwtService,
+	}
 }
 
 func (au *AuthUseCaseImpl) Login(userID int, password string) (string, error) {
-	println("login")
-	return "ok", nil
+
+	// パスワードを取得
+	hashedPassword, err := au.AuthRepository.GetPasswordByUserID(userID)
+	if err != nil {
+		return "", errors.New("could not retrieve user password")
+	}
+
+	// パスワードの検証
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
+		return "", errors.New("invalid password")
+	}
+
+	// tokenの発行
+	token, err := au.JWTService.GenerateJWT(userID)
+	if err != nil {
+		return "", errors.New("could not generate token")
+	}
+
+	return token, nil
 }

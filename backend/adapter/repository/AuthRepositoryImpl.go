@@ -12,7 +12,16 @@ func NewAuthRepository(db *sql.DB) *AuthRepositoryImpl {
 	return &AuthRepositoryImpl{db: db}
 }
 
-func (ur *AuthRepositoryImpl) Select(userID int) error {
+func (ur *AuthRepositoryImpl) GetPasswordByUserID(userID int) (string, error) {
 
-	return nil
+	var password string
+	err := ur.db.QueryRow(
+		"SELECT password FROM `users` WHERE `id`=?", userID,
+	).Scan(&password)
+
+	if err != nil {
+		return "", err
+	}
+	return password, nil
+
 }

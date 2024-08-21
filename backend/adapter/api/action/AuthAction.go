@@ -6,11 +6,15 @@ import (
 	"net/http"
 )
 
-func LoginHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase, authUserUseCase usecase.AuthUseCase) {
+func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
+
+	var userIDFloat float64
+	var userID int
+	var password string
 
 	// リクエストボディを保持するためのmap
 	var requestBody map[string]interface{}
@@ -21,26 +25,32 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.Us
 		return
 	}
 
-	// TODO : userUseCaseを利用してUser情報を取得
+	// requestBodyからuserIDを取り出し、string型として扱う
+	userIDFloat, ok := requestBody["userID"].(float64)
+	if !ok {
+		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		return
+	}
+	// userIDをintに変換
+	userID = int(userIDFloat)
 
-	// TODO : userUseCaseやauthUserUseCaseを利用して、ユーザー認証を実装
+	// requestBodyからuserIDを取り出し、string型として扱う
+	password, ok2 := requestBody["password"].(string)
+	if !ok2 {
+		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		return
+	}
 
-	// // ここでは簡易的な認証の例を示します。
-	// if username != "testuser" || password != "password" {
-	// 	http.Error(w, "Invalid credentials", http.StatusUnauthorized)
-	// 	return
-	// }
-
-	// // 認証が成功したらJWTを生成
-	// token, err := auth.GenerateJWT(username)
-	// if err != nil {
-	// 	http.Error(w, "Could not generate token", http.StatusInternalServerError)
-	// 	return
-	// }
+	// TODO : authUserUseCaseを利用して、ユーザー認証を実装
+	auth, err := authUserUseCase.Login(userID, password)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// 成功レスポンス (トークンを返す)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
-		"token": token,
+		"token": auth,
 	})
 }

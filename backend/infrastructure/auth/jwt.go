@@ -7,32 +7,41 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey = []byte("your-secret-key")
+type JWTService struct {
+	secretKey []byte
+}
 
 type Claims struct {
-	Username string `json:"username"`
+	UserID int `json:"user_id"`
 	jwt.RegisteredClaims
 }
 
+// JWTServiceのコンストラクタ
+func NewJWTService(secretKey string) *JWTService {
+	return &JWTService{
+		secretKey: []byte(secretKey),
+	}
+}
+
 // トークンの生成
-func GenerateJWT(username string) (string, error) {
+func (s *JWTService) GenerateJWT(userID int) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
-		Username: username,
+		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString(s.secretKey)
 }
 
 // トークンの検証
-func ValidateJWT(tokenStr string) (*Claims, error) {
+func (s *JWTService) ValidateJWT(tokenStr string) (*Claims, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
-		return jwtKey, nil
+		return s.secretKey, nil
 	})
 
 	if err != nil {
