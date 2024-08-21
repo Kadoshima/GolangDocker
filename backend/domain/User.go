@@ -20,10 +20,10 @@ type User struct {
 }
 
 // マップ型 db を定義
-type db map[string]string
+type dbmap map[string]string
 
 // マップの初期化
-var DatabaseFields = db{
+var DatabaseFields = dbmap{
 	"ID":           "id",
 	"StudentID":    "student_id",
 	"Nickname":     "nickname",

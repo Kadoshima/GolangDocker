@@ -32,8 +32,8 @@ func (ur *UserRepositoryImpl) Select(userID int) (*domain.User, error) {
 	user := &domain.User{}
 
 	err := ur.db.QueryRow(
-		"SELECT id, student_id, nickname, email, password, department_id, course_id FROM `users` WHERE `id`=?", userID,
-	).Scan(&user.ID, &user.StudentID, &user.Nickname, &user.Email, &user.Password, &user.DepartmentID, &user.CourseID)
+		"SELECT id, student_id, nickname, email, department_id, course_id FROM `users` WHERE `id`=?", userID,
+	).Scan(&user.ID, &user.StudentID, &user.Nickname, &user.Email, &user.DepartmentID, &user.CourseID)
 
 	if err != nil {
 		return nil, err
