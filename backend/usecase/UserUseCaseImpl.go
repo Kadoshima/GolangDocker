@@ -18,7 +18,7 @@ func NewUserUseCase(userRepository repository.UserRepository) *UserUseCaseImpl {
 func (uu *UserUseCaseImpl) CreateUser(user *domain.User) error {
 
 	// リポジトリを使ってユーザーを保存
-	if err := uu.UserRepository.Save(user); err != nil {
+	if err := uu.UserRepository.Create(user); err != nil {
 		return err
 	}
 
