@@ -54,3 +54,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 		"token": auth,
 	})
 }
+
+func Atest(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
+	println("gge")
+	return
+}

@@ -25,7 +25,9 @@ func NewJWTService(secretKey string) *JWTService {
 
 // トークンの生成
 func (s *JWTService) GenerateJWT(userID int) (string, error) {
+	// 有効期限の決定 (24H)
 	expirationTime := time.Now().Add(24 * time.Hour)
+	// クレームの作成 (UserIDと有効期限を含む文字列を)
 	claims := &Claims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -33,6 +35,7 @@ func (s *JWTService) GenerateJWT(userID int) (string, error) {
 		},
 	}
 
+	// HS256で暗号化したtokenを発行
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(s.secretKey)
 }
