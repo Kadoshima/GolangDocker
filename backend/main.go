@@ -37,7 +37,7 @@ func main() {
 	authUseCase := usecase.NewAuthUseCase(authRepo, jwtService)
 
 	// ルートの設定（依存性注入）
-	r := router.SetupRouter(db, userUseCase, authUseCase)
+	r := router.SetupRouter(db, userUseCase, authUseCase, jwtService)
 	log.Println("Starting server on :8000")
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatalf("Could not start server: %v", err)
