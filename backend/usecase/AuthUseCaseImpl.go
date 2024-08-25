@@ -41,7 +41,3 @@ func (au *AuthUseCaseImpl) Login(userID int, password string) (string, error) {
 
 	return token, nil
 }
-
-func test() error {
-	return nil
-}
