@@ -29,6 +29,11 @@ func JWTMiddleware(authService *auth.JWTService) func(http.Handler) http.Handler
 				return
 			}
 
+			// requestのcontextにuserIDを入れる
+			/*
+				取り出すときはこう
+				userID, ok := r.Context().Value(middleware.UserContextKey).(int)
+			*/
 			ctx := context.WithValue(r.Context(), UserContextKey, claims.UserID)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
