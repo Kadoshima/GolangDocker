@@ -4,8 +4,8 @@ JWT : golang-jwt/jwt (https://github.com/golang-jwt/jwt)
 中部大学では学科間の購入を深めるために、以下のようなプロジェクトが進行している。その一環として自由に書き込みができる掲示板アプリを作成する。
 
 プロジェクト : 
-
-[EP20086_萩原圭島_屠コメント.pdf](https://prod-files-secure.s3.us-west-2.amazonaws.com/3a922991-a48c-40ea-a8cf-3d8cb2547138/323294e0-e317-4da8-a464-60c38a107b0c/EP20086_%E8%90%A9%E5%8E%9F%E5%9C%AD%E5%B3%B6_%E5%B1%A0%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88.pdf)
+中部大学で進む学生の学力向上に向けたプロジェクト(PDF)
+https://drive.google.com/file/d/14lBC3PIAs16_IP9kmMKwEzsawloZCvrv/view?usp=sharing
 
 # なんのために
 
