@@ -29,7 +29,6 @@ func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase, authUseCase usecas
 		action.UpdateUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
-	// 認証が必要なルートにミドルウェアを適用
 	mux.Handle("/api/atest", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.Atest(w, r, authUseCase) // useCaseをハンドラーに渡す
 	})))

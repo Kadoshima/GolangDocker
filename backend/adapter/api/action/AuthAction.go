@@ -42,7 +42,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 		return
 	}
 
-	// TODO : authUserUseCaseを利用して、ユーザー認証を実装
+	// authUserUseCaseを利用して、ユーザー認証を実装
 	auth, err := authUserUseCase.Login(userID, password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
