@@ -36,7 +36,7 @@ func main() {
 
 	// Forumの''
 	forumRepo := repository.NewForumRepository(db)
-	forumUseCase := usecase.NewForumUseCase(forumRepo, jwtService)
+	forumUseCase := usecase.NewForumUseCase(forumRepo)
 
 	// ルートの設定（依存性注入）
 	r := router.SetupRouter(db, jwtService, userUseCase, authUseCase, forumUseCase)

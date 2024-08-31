@@ -33,7 +33,7 @@ func SetupRouter(db *sql.DB, jwtService *auth.JWTService, userUseCase usecase.Us
 		action.Atest(w, r, authUseCase) // useCaseをハンドラーに渡す
 	})))
 
-	mux.Handle("/api/atest", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/Fourm", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.ForumCreate(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
