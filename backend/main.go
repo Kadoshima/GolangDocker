@@ -26,18 +26,20 @@ func main() {
 	// JWTServiceの初期化
 	jwtService := auth.NewJWTService("your-secret-key")
 
-	// リポジトリの初期化
+	// UserのUseCaseとリポジトリの初期化
 	userRepo := repository.NewUserRepository(db)
-
-	// ユースケースの初期化
 	userUseCase := usecase.NewUserUseCase(userRepo)
 
+	// Authの''
 	authRepo := repository.NewAuthRepository(db)
-	// ユースケースの初期化
 	authUseCase := usecase.NewAuthUseCase(authRepo, jwtService)
 
+	// Forumの''
+	forumRepo := repository.NewForumRepository(db)
+	forumUseCase := usecase.NewForumUseCase(forumRepo, jwtService)
+
 	// ルートの設定（依存性注入）
-	r := router.SetupRouter(db, userUseCase, authUseCase, jwtService)
+	r := router.SetupRouter(db, jwtService, userUseCase, authUseCase, forumUseCase)
 	log.Println("Starting server on :8000")
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatalf("Could not start server: %v", err)

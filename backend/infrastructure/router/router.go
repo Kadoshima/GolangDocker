@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase, authUseCase usecase.AuthUseCase, jwtService *auth.JWTService) *http.ServeMux {
+func SetupRouter(db *sql.DB, jwtService *auth.JWTService, userUseCase usecase.UserUseCase, authUseCase usecase.AuthUseCase, forumUseCase usecase.ForumsUseCase) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	// ユーザー作成ハンドラーの設定
@@ -31,6 +31,10 @@ func SetupRouter(db *sql.DB, userUseCase usecase.UserUseCase, authUseCase usecas
 
 	mux.Handle("/api/atest", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.Atest(w, r, authUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	mux.Handle("/api/atest", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.ForumCreate(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	return mux
