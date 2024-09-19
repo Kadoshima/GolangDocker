@@ -16,7 +16,7 @@ func NewPostUseCase(postRepository repository.PostRepository, JWTService *auth.J
 	return &PostUseCaseImpl{postRepository, JWTService}
 }
 
-func (pu *PostUseCaseImpl) NewPost(forumID, userID int, content, tags string, parentID *int) (*domain.Post, error) {
+func (pu *PostUseCaseImpl) NewPost(forumID, userID int, content, tags string, parentID int) (*domain.Post, error) {
 	post := &domain.Post{
 		ForumId:   forumID,
 		UserId:    userID,

@@ -8,7 +8,6 @@ import (
 )
 
 func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
-
 	//メソッドチェック
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -41,7 +40,7 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 }
 
 func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
-
+	//メソッドチェック
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -53,7 +52,6 @@ func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase
 		println(err.Error())
 		return
 	}
-	println(courseID)
 
 	courseIDInt, err := strconv.Atoi(courseID["courseID"])
 
@@ -65,7 +63,7 @@ func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase
 
 	courseMap := make(map[int]string) // マップの初期化
 
-	// 単一のcourseに対してnilチェック
+	// courseに対してnilチェック
 	if course != nil {
 		courseMap[course.ID] = course.Name
 	} else {

@@ -82,24 +82,24 @@ func (fr *ForumRepositoryImpl) SelectForum(forumID int) (*domain.Forums, error) 
 		return nil, err
 	}
 
-	// モデレーターの取得
-	rows, err := fr.db.Query(
-		"SELECT user_id FROM forum_moderators WHERE forum_id = ?", forumID,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+	//// モデレーターの取得
+	//rows, err := fr.db.Query(
+	//	"SELECT user_id FROM forum_moderators WHERE forum_id = ?", forumID,
+	//)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//defer rows.Close()
 
-	var moderators []int
-	for rows.Next() {
-		var userID int
-		if err := rows.Scan(&userID); err != nil {
-			return nil, err
-		}
-		moderators = append(moderators, userID)
-	}
-	forum.Moderators = moderators
+	//var moderators []int
+	//for rows.Next() {
+	//	var userID int
+	//	if err := rows.Scan(&userID); err != nil {
+	//		return nil, err
+	//	}
+	//	moderators = append(moderators, userID)
+	//}
+	//forum.Moderators = moderators
 
 	return forum, nil
 }
@@ -133,17 +133,22 @@ func (fr *ForumRepositoryImpl) CreateForum(forum *domain.Forums) (*domain.Forums
 	}
 	forum.ID = int(forumID)
 
-	// モデレーターの挿入
-	for _, userID := range forum.Moderators {
-		_, err := tx.Exec(
-			"INSERT INTO forum_moderators (forum_id, user_id) VALUES (?, ?)",
-			forum.ID, userID,
-		)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-	}
+	//// モデレーターの挿入
+	//for _, userID := range forum.Moderators {
+	//	_, err := tx.Exec(
+	//		"INSERT INTO forum_moderators (forum_id, user_id) VALUES (?, ?)",
+	//		forum.ID, userID,
+	//	)
+	//	if err != nil {
+	//		tx.Rollback()
+	//		return nil, err
+	//	}
+	//}
+	//
+	//err = tx.Commit()
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	err = tx.Commit()
 	if err != nil {

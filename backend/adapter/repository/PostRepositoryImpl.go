@@ -30,7 +30,7 @@ func (pr *PostRepositoryImpl) SelectPost(forumID int) (*domain.Post, error) {
 	}
 	if parentID.Valid {
 		val := int(parentID.Int64)
-		post.ParentId = &val
+		post.ParentId = val
 	}
 
 	// 添付ファイルの取得
@@ -54,9 +54,6 @@ func (pr *PostRepositoryImpl) CreatePost(post *domain.Post) (*domain.Post, error
 	}
 
 	var parentID interface{}
-	if post.ParentId != nil {
-		parentID = *post.ParentId
-	}
 
 	// postsテーブルへの挿入
 	result, err := tx.Exec(
@@ -105,9 +102,6 @@ func (pr *PostRepositoryImpl) UpdatePost(post *domain.Post) (*domain.Post, error
 	}
 
 	var parentID interface{}
-	if post.ParentId != nil {
-		parentID = *post.ParentId
-	}
 
 	// postsテーブルの更新
 	_, err = tx.Exec(

@@ -39,14 +39,14 @@ func SetupRouter(db *sql.DB,
 		action.UpdateUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
+	// 新しい掲示板(Forum)を作成するAPI
+	mux.Handle("/api/forum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.CreateForumAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
+	})))
+
 	// 新しいpostを作成するAPI
 	mux.Handle("/api/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.PostAction(w, r, postUseCase) // useCaseをハンドラーに渡す
-	})))
-
-	// 新しい掲示板(Forum)を作成するAPI
-	mux.Handle("/api/Forum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		action.CreateForumAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// 全てのCourse情報の取得
@@ -60,9 +60,14 @@ func SetupRouter(db *sql.DB,
 	})
 
 	// Department情報の取得
-	mux.Handle("/api/Department", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/allDepartments", func(w http.ResponseWriter, r *http.Request) {
+		action.GetAllDepartmentAction(w, r, departmentUseCase) // useCaseをハンドラーに渡す
+	})
+
+	// Department情報の取得
+	mux.HandleFunc("/api/departments", func(w http.ResponseWriter, r *http.Request) {
 		action.GetDepartmentAction(w, r, departmentUseCase) // useCaseをハンドラーに渡す
-	})))
+	})
 
 	return mux
 }
