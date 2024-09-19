@@ -3,10 +3,15 @@ package domain
 import "time"
 
 type Forums struct {
-	Id          int
+	ID          int
 	Title       string
 	Description string
-	CreatedById int
+	CreatedBy   int
+	Status      int
+	Visibility  int
+	Category    string
+	NumPosts    int
+	Moderators  []int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

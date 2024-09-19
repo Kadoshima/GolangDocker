@@ -3,7 +3,7 @@ package domain
 import "time"
 
 type Department struct {
-	Id        int
+	ID        int
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time

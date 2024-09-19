@@ -1,12 +1,12 @@
 package action
 
 import (
+	"backend/adapter/api/middleware"
 	"backend/domain"
 	"backend/usecase"
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
@@ -44,19 +44,10 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 		return
 	}
 
-	var userIDStr string
-	var userID int
-
-	userIDStr = r.URL.Query().Get("userID")
-	if userIDStr == "" {
-		http.Error(w, "userID is required", http.StatusBadRequest)
-		return
-	}
-
-	// userIDをintに変換
-	userID, err := strconv.Atoi(userIDStr)
-	if err != nil {
-		http.Error(w, "Invalid userID", http.StatusBadRequest)
+	// コンテキストからユーザーIDを取得
+	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
 		return
 	}
 
