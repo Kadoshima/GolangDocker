@@ -1,0 +1,21 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Description of your API",
+        "title": "Your API Title",
+        "termsOfService": "http://your.terms.of.service.url",
+        "contact": {
+            "name": "Your Name",
+            "url": "http://your.contact.url",
+            "email": "your.email@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8888",
+    "basePath": "/",
+    "paths": {}
+}

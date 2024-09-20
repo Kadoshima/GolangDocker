@@ -6,6 +6,7 @@ import (
 	"backend/infrastructure/auth"
 	"backend/usecase"
 	"database/sql"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 )
 
@@ -21,6 +22,9 @@ func SetupRouter(db *sql.DB,
 ) *http.ServeMux {
 
 	mux := http.NewServeMux()
+
+	// swaggerの設定
+	mux.Handle("/doc/", httpSwagger.WrapHandler)
 
 	// ユーザー作成ハンドラーの設定
 	mux.HandleFunc("/api/user", func(w http.ResponseWriter, r *http.Request) {

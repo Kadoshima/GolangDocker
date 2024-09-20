@@ -1,0 +1,16 @@
+basePath: /
+host: localhost:8888
+info:
+  contact:
+    email: your.email@example.com
+    name: Your Name
+    url: http://your.contact.url
+  description: Description of your API
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+  termsOfService: http://your.terms.of.service.url
+  title: Your API Title
+  version: "1.0"
+paths: {}
+swagger: "2.0"
