@@ -45,6 +45,8 @@ https://drive.google.com/file/d/14lBC3PIAs16_IP9kmMKwEzsawloZCvrv/view?usp=shari
 1. リポジトリをクローンする
 2. cdコマンドでGolangDockerのリポジトリに移動する
 3. 以下のコマンドでdocker-composeを起動する
-4. docker ps で起動している事を確認する
-```docker-compose up -d --build```
+
+   ```docker-compose up -d --build```
+
+5. docker ps で起動している事を確認する
 
