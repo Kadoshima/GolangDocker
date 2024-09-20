@@ -29,8 +29,6 @@ func CreateForumAction(w http.ResponseWriter, r *http.Request, useCase usecase.F
 		return
 	}
 
-	println(userID)
-
 	// リクエストボディをForumDTOにデコード
 	var forumRequest ForumDTO
 	if err := json.NewDecoder(r.Body).Decode(&forumRequest); err != nil {
@@ -60,4 +58,26 @@ func CreateForumAction(w http.ResponseWriter, r *http.Request, useCase usecase.F
 	}
 
 	return
+}
+
+func GetForumsAction(w http.ResponseWriter, r *http.Request, useCase usecase.ForumUseCase) {
+	// メソッドチェック
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// UseCaseを呼び出してフォーラムのリストを取得
+	forums, err := useCase.GetForum()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// フォーラムのリストをレスポンスとして返す
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(forums); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

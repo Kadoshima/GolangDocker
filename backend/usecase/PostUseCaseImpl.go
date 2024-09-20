@@ -35,3 +35,13 @@ func (pu *PostUseCaseImpl) NewPost(forumID, userID int, content, tags string, pa
 
 	return createdPost, nil
 }
+
+func (pu *PostUseCaseImpl) GetPosts(forumID int) ([]domain.Post, error) {
+	// リポジトリの SelectPost 関数を呼び出して投稿を取得
+	posts, err := pu.postRepository.SelectPost(forumID)
+	if err != nil {
+		return nil, err
+	}
+
+	return posts, nil
+}

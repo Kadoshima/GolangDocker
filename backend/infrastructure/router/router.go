@@ -40,13 +40,23 @@ func SetupRouter(db *sql.DB,
 	})
 
 	// 新しい掲示板(Forum)を作成するAPI
-	mux.Handle("/api/forum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/CreateForum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.CreateForumAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
+	// 掲示板情報を取得する
+	mux.Handle("/api/GetForum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.GetForumsAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
+	})))
+
 	// 新しいpostを作成するAPI
-	mux.Handle("/api/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		action.PostAction(w, r, postUseCase) // useCaseをハンドラーに渡す
+	mux.Handle("/api/Post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.CreatePostAction(w, r, postUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	// forumに対応するpost群を取る
+	mux.Handle("/api/GetPosts", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.GetPostsAction(w, r, postUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// 全てのCourse情報の取得
