@@ -1,7 +1,23 @@
+// @title           ChubuForum API
+// @version         1.0
+// @description     中部地方のユーザー向けの掲示板アプリ「ChubuForum」のAPI。投稿の作成、閲覧、編集、削除、コメントの投稿などを可能にします。
+// @termsOfService  http://your.terms.of.service.url
+
+// @contact.name   あなたの名前
+// @contact.url    http://your.contact.url
+// @contact.email  your.email@example.com
+
+// @license.name  MIT
+// @license.url   http://opensource.org/licenses/MIT
+
+// @host      os3-378-22222.vs.sakura.ne.jp:8000
+// @BasePath  /
+
 package main
 
 import (
 	"backend/adapter/repository"
+	_ "backend/docs"
 	"backend/infrastructure/auth"
 	"backend/infrastructure/database"
 	"backend/infrastructure/router"
