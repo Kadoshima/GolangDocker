@@ -14,19 +14,19 @@ func NewDepartmentRepository(db *sql.DB) *DepartmentRepositoryImpl {
 	return &DepartmentRepositoryImpl{db: db}
 }
 
-func (dr *DepartmentRepositoryImpl) SelectAllDepartments() ([]*domain.Department, error) {
+func (dr *DepartmentRepositoryImpl) SelectAllDepartments() ([]domain.Department, error) {
 	rows, err := dr.db.Query("SELECT id,name FROM departments")
 	if err != nil {
 		return nil, err
 	}
 
-	var departments []*domain.Department
+	var departments []domain.Department
 	for rows.Next() {
 		var department domain.Department
 		if err := rows.Scan(&department.ID, &department.Name); err != nil {
 			return nil, err
 		}
-		departments = append(departments, &department)
+		departments = append(departments, department)
 	}
 
 	return departments, nil

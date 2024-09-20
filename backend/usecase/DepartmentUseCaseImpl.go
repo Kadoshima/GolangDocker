@@ -19,7 +19,7 @@ func NewDepartmentUseCase(repository repository.DepartmentRepository, JWTService
 	return DepartmentUseCaseImpl
 }
 
-func (di DepartmentUseCaseImpl) GetAllDepartments() ([]*domain.Department, error) {
+func (di DepartmentUseCaseImpl) GetAllDepartments() ([]domain.Department, error) {
 	// 全てのdepartment情報を返す
 	departments, err := di.DepartmentRepository.SelectAllDepartments()
 	if err != nil {
