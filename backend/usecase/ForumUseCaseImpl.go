@@ -41,6 +41,24 @@ func (fu *ForumUseCaseImpl) CreateForum(title, description string, createdBy, st
 	return createdForum, nil
 }
 
+func (fu *ForumUseCaseImpl) GetForum() ([]*domain.Forums, error) {
+	forums, err := fu.ForumRepository.SelectAllForums()
+	if err != nil {
+		return nil, err
+	}
+
+	forumsPtr := make([]*domain.Forums, len(forums))
+	for i := range forums {
+		forumsPtr[i] = &forums[i]
+	}
+
+	return forumsPtr, nil
+}
+
+func (fu *ForumUseCaseImpl) DeleteForum(forum *domain.Forums) error {
+	return nil
+}
+
 func (fu *ForumUseCaseImpl) JoinForum(forumID int) (err error) {
 	return nil
 }

@@ -14,33 +14,47 @@ func NewPostRepository(db *sql.DB) *PostRepositoryImpl {
 	return &PostRepositoryImpl{db: db}
 }
 
-func (pr *PostRepositoryImpl) SelectPost(forumID int) (*domain.Post, error) {
-	post := &domain.Post{}
-	var parentID sql.NullInt64
-
-	err := pr.db.QueryRow(
-		`SELECT id, forum_id, user_id, content, tags, status, parent_id, created_at, updated_at
-		FROM posts WHERE id = ?`, forumID,
-	).Scan(
-		&post.ID, &post.ForumId, &post.UserId, &post.Content, &post.Tags,
-		&post.Status, &parentID, &post.CreatedAt, &post.UpdatedAt,
+func (pr *PostRepositoryImpl) SelectPost(forumID int) ([]domain.Post, error) {
+	// データベースからpostsを取得
+	rows, err := pr.db.Query(
+		`SELECT id, forum_id, user_id, content, tags, status, parent_id
+        FROM posts WHERE forum_id = ?`, forumID,
 	)
 	if err != nil {
 		return nil, err
 	}
-	if parentID.Valid {
-		val := int(parentID.Int64)
-		post.ParentId = val
+	defer rows.Close()
+
+	var posts []domain.Post
+
+	// 取得した行をループで処理
+	for rows.Next() {
+		var post domain.Post
+		var parentID sql.NullInt64
+
+		err := rows.Scan(
+			&post.ID, &post.ForumId, &post.UserId, &post.Content, &post.Tags,
+			&post.Status, &parentID,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		if parentID.Valid {
+			post.ParentId = int(parentID.Int64)
+		} else {
+			post.ParentId = 0 // 必要に応じてデフォルト値を設定
+		}
+
+		posts = append(posts, post)
 	}
 
-	// 添付ファイルの取得
-	//attachments, err := pr.getAttachments(post.ID)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//post.Attachments = attachments
+	// ループ中のエラーをチェック
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
 
-	return post, nil
+	return posts, nil
 }
 
 func (pr *PostRepositoryImpl) CreatePost(post *domain.Post) (*domain.Post, error) {

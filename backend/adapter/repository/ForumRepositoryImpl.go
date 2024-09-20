@@ -17,7 +17,7 @@ func NewForumRepository(db *sql.DB) *ForumRepositoryImpl {
 func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 	// forumsテーブルから全てのフォーラムを取得
 	rows, err := fr.db.Query(
-		`SELECT id, title, description, created_by, status, visibility, category, num_posts, created_at, updated_at
+		`SELECT id, title, description, created_by, status, visibility, category, num_posts
 		FROM forums`,
 	)
 	if err != nil {
@@ -31,30 +31,30 @@ func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 		var forum domain.Forums
 		err := rows.Scan(
 			&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-			&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.CreatedAt, &forum.UpdatedAt,
+			&forum.Visibility, &forum.Category, &forum.NumPosts,
 		)
 		if err != nil {
 			return nil, err
 		}
 
-		// 各フォーラムのモデレーターを取得
-		modRows, err := fr.db.Query(
-			"SELECT user_id FROM forum_moderators WHERE forum_id = ?", forum.ID,
-		)
-		if err != nil {
-			return nil, err
-		}
-		defer modRows.Close()
-
-		var moderators []int
-		for modRows.Next() {
-			var userID int
-			if err := modRows.Scan(&userID); err != nil {
-				return nil, err
-			}
-			moderators = append(moderators, userID)
-		}
-		forum.Moderators = moderators
+		//// 各フォーラムのモデレーターを取得
+		//modRows, err := fr.db.Query(
+		//	"SELECT user_id FROM forum_moderators WHERE forum_id = ?", forum.ID,
+		//)
+		//if err != nil {
+		//	return nil, err
+		//}
+		//defer modRows.Close()
+		//
+		//var moderators []int
+		//for modRows.Next() {
+		//	var userID int
+		//	if err := modRows.Scan(&userID); err != nil {
+		//		return nil, err
+		//	}
+		//	moderators = append(moderators, userID)
+		//}
+		//forum.Moderators = moderators
 
 		forums = append(forums, forum)
 	}
