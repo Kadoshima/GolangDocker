@@ -50,3 +50,5 @@ https://drive.google.com/file/d/14lBC3PIAs16_IP9kmMKwEzsawloZCvrv/view?usp=shari
 
 5. docker ps で起動している事を確認する
 
+# ER図 (2024年9月23日)
+![Untitled diagram-2024-09-22-174526](https://github.com/user-attachments/assets/670afb74-f627-4666-b469-a8061b48f639)
