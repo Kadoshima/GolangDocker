@@ -15,6 +15,16 @@ type ForumDTO struct {
 	Category    string `json:"category" validate:"required"`
 }
 
+// CreateForumAction CreateForumHandler godoc
+// @Summary      フォーラムを作成します
+// @Description  新しいフォーラムを追加します
+// @Tags         forum
+// @Accept       json
+// @Produce      json
+// @Param        forum  body      domain.Forums  true  "フォーラムデータ"
+// @Success      201   {object}  domain.Forums
+// @Failure      400   {object}  map[string]string
+// @Router       /api/forum [post]
 func CreateForumAction(w http.ResponseWriter, r *http.Request, useCase usecase.ForumUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodPost {
@@ -60,6 +70,16 @@ func CreateForumAction(w http.ResponseWriter, r *http.Request, useCase usecase.F
 	return
 }
 
+// GetForumsAction GetForumInfoHandler godoc
+// @Summary      フォーラム情報を取得します
+// @Description  指定したフォーラムの情報を取得します
+// @Tags         forum
+// @Accept       json
+// @Produce      json
+// @Param        forumID  query     int     true  "フォーラムID"
+// @Success      200      {object}  domain.Forums
+// @Failure      404      {object}  map[string]string
+// @Router       /api/Forum/InfoGet [get]
 func GetForumsAction(w http.ResponseWriter, r *http.Request, useCase usecase.ForumUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodGet {

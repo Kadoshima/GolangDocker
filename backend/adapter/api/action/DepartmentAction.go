@@ -42,6 +42,15 @@ func GetAllDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usec
 	return
 }
 
+// GetDepartmentAction GetDepartmentsHandler godoc
+// @Summary      学部情報を取得します
+// @Description  全ての学部の情報を取得します
+// @Tags         department
+// @Accept       json
+// @Produce      json
+// @Success      200      {object}  []domain.Department
+// @Failure      500      {object}  map[string]string
+// @Router       /api/departments [get]
 func GetDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usecase.DepartmentUseCase) {
 
 	// メソッドチェック

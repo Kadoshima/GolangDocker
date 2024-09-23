@@ -15,6 +15,16 @@ type postDto struct {
 	ParentID int    `json:"parent_id"`
 }
 
+// CreatePostAction CreatePostHandler godoc
+// @Summary      ポストを作成します
+// @Description  指定したフォーラムにポストを追加します
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        post  body      domain.Post  true  "ポストデータ"
+// @Success      201   {object}  domain.Post
+// @Failure      400   {object}  map[string]string
+// @Router       /api/post [post]
 func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.PostUseCase) {
 
 	// メソッドチェック
@@ -61,6 +71,16 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 	return
 }
 
+// GetPostsAction GetPostsHandler godoc
+// @Summary      ポスト一覧を取得します
+// @Description  指定したフォーラムのポスト一覧を取得します
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        forum_id  query     int  true  "フォーラムID"
+// @Success      200       {array}   domain.Post
+// @Failure      404       {object}  map[string]string
+// @Router       /api/GetPosts [get]
 func GetPostsAction(w http.ResponseWriter, r *http.Request, useCase usecase.PostUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodGet {

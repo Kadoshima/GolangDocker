@@ -6,6 +6,16 @@ import (
 	"net/http"
 )
 
+// LoginHandler godoc
+// @Summary      ユーザーのログイン
+// @Description  ユーザーがシステムにログインします
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        body  body      map[string]interface{}  true  "ログイン情報"
+// @Success      200   {object}  map[string]string       "成功時のトークン"
+// @Failure      400   {object}  map[string]string       "バリデーションエラー"
+// @Router       /api/user/login [post]
 func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
