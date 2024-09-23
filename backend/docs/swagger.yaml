@@ -1,16 +1,363 @@
 basePath: /
-host: localhost:8888
+definitions:
+  domain.Course:
+    properties:
+      createdAt:
+        type: string
+      departmentID:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  domain.Department:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  domain.Forums:
+    properties:
+      category:
+        type: string
+      createdAt:
+        type: string
+      createdBy:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      moderators:
+        items:
+          type: integer
+        type: array
+      numPosts:
+        type: integer
+      status:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+      visibility:
+        type: integer
+    type: object
+  domain.Post:
+    properties:
+      attachments:
+        items:
+          type: string
+        type: array
+      content:
+        type: string
+      createdAt:
+        type: string
+      forumId:
+        type: integer
+      id:
+        type: integer
+      parentId:
+        type: integer
+      status:
+        type: integer
+      tags:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: integer
+    type: object
+  domain.User:
+    properties:
+      courseID:
+        type: integer
+      createdAt:
+        type: string
+      departmentID:
+        type: integer
+      email:
+        type: string
+      id:
+        description: IDより前に新たな要素を追加するとUserInfoUpdateが機能しない
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+      studentID:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: os3-378-22222.vs.sakura.ne.jp:8000
 info:
   contact:
     email: your.email@example.com
-    name: Your Name
+    name: あなたの名前
     url: http://your.contact.url
-  description: Description of your API
+  description: 中部地方のユーザー向けの掲示板アプリ「ChubuForum」のAPI。投稿の作成、閲覧、編集、削除、コメントの投稿などを可能にします。
   license:
     name: MIT
     url: http://opensource.org/licenses/MIT
   termsOfService: http://your.terms.of.service.url
-  title: Your API Title
+  title: ChubuForum API
   version: "1.0"
-paths: {}
+paths:
+  /api/Course:
+    get:
+      consumes:
+      - application/json
+      description: 指定したコースの情報を取得します
+      parameters:
+      - description: コースID
+        in: query
+        name: courseID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Course'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: コース情報を取得します
+      tags:
+      - course
+  /api/Forum/InfoGet:
+    get:
+      consumes:
+      - application/json
+      description: 指定したフォーラムの情報を取得します
+      parameters:
+      - description: フォーラムID
+        in: query
+        name: forumID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Forums'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: フォーラム情報を取得します
+      tags:
+      - forum
+  /api/GetPosts:
+    get:
+      consumes:
+      - application/json
+      description: 指定したフォーラムのポスト一覧を取得します
+      parameters:
+      - description: フォーラムID
+        in: query
+        name: forum_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Post'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ポスト一覧を取得します
+      tags:
+      - post
+  /api/departments:
+    get:
+      consumes:
+      - application/json
+      description: 全ての学部の情報を取得します
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Department'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: 学部情報を取得します
+      tags:
+      - department
+  /api/forum:
+    post:
+      consumes:
+      - application/json
+      description: 新しいフォーラムを追加します
+      parameters:
+      - description: フォーラムデータ
+        in: body
+        name: forum
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Forums'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Forums'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: フォーラムを作成します
+      tags:
+      - forum
+  /api/post:
+    post:
+      consumes:
+      - application/json
+      description: 指定したフォーラムにポストを追加します
+      parameters:
+      - description: ポストデータ
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Post'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Post'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ポストを作成します
+      tags:
+      - post
+  /api/user:
+    post:
+      consumes:
+      - application/json
+      description: 新しいユーザーをシステムに追加します
+      parameters:
+      - description: ユーザーデータ
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ユーザーを作成します
+      tags:
+      - user
+  /api/user/InfoGet:
+    get:
+      consumes:
+      - application/json
+      description: 指定したユーザーの情報を取得します
+      parameters:
+      - description: ユーザーID
+        in: query
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ユーザー情報を取得します
+      tags:
+      - user
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: ユーザーがシステムにログインします
+      parameters:
+      - description: ログイン情報
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功時のトークン
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: バリデーションエラー
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ユーザーのログイン
+      tags:
+      - user
 swagger: "2.0"

@@ -9,6 +9,16 @@ import (
 	"net/http"
 )
 
+// CreateUserHandler godoc
+// @Summary      ユーザーを作成します
+// @Description  新しいユーザーをシステムに追加します
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        user  body      domain.User  true  "ユーザーデータ"
+// @Success      201   {object}  domain.User
+// @Failure      400   {object}  map[string]string
+// @Router       /api/user [post]
 func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -38,6 +48,16 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase useca
 	})
 }
 
+// GetUserInfo GetUserInfoHandler godoc
+// @Summary      ユーザー情報を取得します
+// @Description  指定したユーザーの情報を取得します
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        userID  query     int     true  "ユーザーID"
+// @Success      200     {object}  domain.User
+// @Failure      404     {object}  map[string]string
+// @Router       /api/user/InfoGet [get]
 func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)

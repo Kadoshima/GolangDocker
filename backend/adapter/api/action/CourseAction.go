@@ -39,6 +39,16 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 	return
 }
 
+// GetCourseInfoAction GetCourseHandler godoc
+// @Summary      コース情報を取得します
+// @Description  指定したコースの情報を取得します
+// @Tags         course
+// @Accept       json
+// @Produce      json
+// @Param        courseID  query     string  true  "コースID"
+// @Success      200      {object}  domain.Course
+// @Failure      404      {object}  map[string]string
+// @Router       /api/Course [get]
 func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
 	//メソッドチェック
 	if r.Method != http.MethodGet {
