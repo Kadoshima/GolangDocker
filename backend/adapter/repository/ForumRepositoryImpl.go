@@ -3,6 +3,7 @@ package repository
 import (
 	"backend/domain"
 	"database/sql"
+	"encoding/json"
 	"time"
 )
 
@@ -72,11 +73,11 @@ func (fr *ForumRepositoryImpl) SelectForum(forumID int) (*domain.Forums, error) 
 
 	// 基本情報の取得
 	err := fr.db.QueryRow(
-		`SELECT id, title, description, created_by, status, visibility, category, num_posts, created_at, updated_at
+		`SELECT id, title, description, created_by, status, visibility, category, num_posts, Attachments, created_at, updated_at
 		FROM forums WHERE id = ?`, forumID,
 	).Scan(
 		&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-		&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.CreatedAt, &forum.UpdatedAt,
+		&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.Attachments, &forum.CreatedAt, &forum.UpdatedAt,
 	)
 	if err != nil {
 		return nil, err
@@ -115,11 +116,16 @@ func (fr *ForumRepositoryImpl) CreateForum(forum *domain.Forums) (*domain.Forums
 	}
 
 	// forumsテーブルへの挿入
+	attachmentsJSON, err := json.Marshal(forum.Attachments)
+	if err != nil {
+		return nil, err
+	}
+
 	result, err := tx.Exec(
-		`INSERT INTO forums (title, description, created_by, status, visibility, category, num_posts, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		`INSERT INTO forums (title, description, created_by, status, visibility, category, num_posts, attachments, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		forum.Title, forum.Description, forum.CreatedBy, forum.Status, forum.Visibility,
-		forum.Category, forum.NumPosts, forum.CreatedAt, forum.UpdatedAt,
+		forum.Category, forum.NumPosts, attachmentsJSON, forum.CreatedAt, forum.UpdatedAt,
 	)
 	if err != nil {
 		tx.Rollback()
@@ -168,10 +174,10 @@ func (fr *ForumRepositoryImpl) UpdateForum(forum *domain.Forums) (*domain.Forums
 
 	// forumsテーブルの更新
 	_, err = tx.Exec(
-		`UPDATE forums SET title = ?, description = ?, status = ?, visibility = ?, category = ?, num_posts = ?, updated_at = ?
+		`UPDATE forums SET title = ?, description = ?, status = ?, visibility = ?, category = ?, num_posts = ?, attachments = ?, updated_at = NOW()
 		WHERE id = ?`,
 		forum.Title, forum.Description, forum.Status, forum.Visibility,
-		forum.Category, forum.NumPosts, forum.UpdatedAt, forum.ID,
+		forum.Category, forum.NumPosts, forum.Attachments, forum.ID,
 	)
 	if err != nil {
 		tx.Rollback()
@@ -211,16 +217,6 @@ func (fr *ForumRepositoryImpl) UpdateForum(forum *domain.Forums) (*domain.Forums
 func (fr *ForumRepositoryImpl) DeleteForum(forum *domain.Forums) error {
 	tx, err := fr.db.Begin()
 	if err != nil {
-		return err
-	}
-
-	// モデレーターの削除
-	_, err = tx.Exec(
-		"DELETE FROM forum_moderators WHERE forum_id = ?",
-		forum.ID,
-	)
-	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
