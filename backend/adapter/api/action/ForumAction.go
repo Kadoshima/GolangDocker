@@ -13,6 +13,7 @@ type ForumDTO struct {
 	Status      int    `json:"status" validate:"required,oneof=0 1"`     // 例: 0 = 非アクティブ, 1 = アクティブ
 	Visibility  int    `json:"visibility" validate:"required,oneof=0 1"` // 例: 0 = 非公開, 1 = 公開
 	Category    string `json:"category" validate:"required"`
+	Attachment  string `json:"attachment" validate:"required"`
 }
 
 // CreateForumAction CreateForumHandler godoc

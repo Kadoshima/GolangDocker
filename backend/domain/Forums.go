@@ -11,6 +11,7 @@ type Forums struct {
 	Visibility  int
 	Category    string
 	NumPosts    int
+	Attachments []string
 	Moderators  []int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
