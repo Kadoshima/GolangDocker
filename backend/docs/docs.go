@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/Course": {
+        "/api/course": {
             "get": {
                 "description": "指定したコースの情報を取得します",
                 "consumes": [
@@ -65,7 +65,74 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/Forum/InfoGet": {
+        "/api/department/get": {
+            "get": {
+                "description": "全ての学部の情報を取得します",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "department"
+                ],
+                "summary": "学部情報を取得します",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Department"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/departments/get": {
+            "get": {
+                "description": "全ての学部の情報を取得します",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "department"
+                ],
+                "summary": "学部情報を取得します",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Department"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/forum/get": {
             "get": {
                 "description": "指定したフォーラムの情報を取得します",
                 "consumes": [
@@ -106,86 +173,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/GetPosts": {
-            "get": {
-                "description": "指定したフォーラムのポスト一覧を取得します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "post"
-                ],
-                "summary": "ポスト一覧を取得します",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "フォーラムID",
-                        "name": "forum_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Post"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/departments": {
-            "get": {
-                "description": "全ての学部の情報を取得します",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "department"
-                ],
-                "summary": "学部情報を取得します",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Department"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/forum": {
+        "/api/forum/post": {
             "post": {
                 "description": "新しいフォーラムを追加します",
                 "consumes": [
@@ -228,7 +216,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/post": {
+        "/api/post/post": {
             "post": {
                 "description": "指定したフォーラムにポストを追加します",
                 "consumes": [
@@ -261,6 +249,50 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/posts/get": {
+            "get": {
+                "description": "指定したフォーラムのポスト一覧を取得します",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "ポスト一覧を取得します",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "フォーラムID",
+                        "name": "forum_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Post"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -314,7 +346,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/user/InfoGet": {
+        "/api/user/get": {
             "get": {
                 "description": "指定したユーザーの情報を取得します",
                 "consumes": [
@@ -401,6 +433,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/user/update": {
+            "post": {
+                "description": "指定したユーザーの情報を修正します",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "ユーザー情報を修正します",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ユーザーID",
+                        "name": "userID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.User"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -444,6 +517,12 @@ const docTemplate = `{
         "domain.Forums": {
             "type": "object",
             "properties": {
+                "attachments": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "category": {
                     "type": "string"
                 },

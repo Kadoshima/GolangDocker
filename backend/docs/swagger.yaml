@@ -26,6 +26,10 @@ definitions:
     type: object
   domain.Forums:
     properties:
+      attachments:
+        items:
+          type: string
+        type: array
       category:
         type: string
       createdAt:
@@ -112,7 +116,7 @@ info:
   title: ChubuForum API
   version: "1.0"
 paths:
-  /api/Course:
+  /api/course:
     get:
       consumes:
       - application/json
@@ -139,7 +143,51 @@ paths:
       summary: コース情報を取得します
       tags:
       - course
-  /api/Forum/InfoGet:
+  /api/department/get:
+    get:
+      consumes:
+      - application/json
+      description: 全ての学部の情報を取得します
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Department'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: 学部情報を取得します
+      tags:
+      - department
+  /api/departments/get:
+    get:
+      consumes:
+      - application/json
+      description: 全ての学部の情報を取得します
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Department'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: 学部情報を取得します
+      tags:
+      - department
+  /api/forum/get:
     get:
       consumes:
       - application/json
@@ -166,59 +214,7 @@ paths:
       summary: フォーラム情報を取得します
       tags:
       - forum
-  /api/GetPosts:
-    get:
-      consumes:
-      - application/json
-      description: 指定したフォーラムのポスト一覧を取得します
-      parameters:
-      - description: フォーラムID
-        in: query
-        name: forum_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/domain.Post'
-            type: array
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: ポスト一覧を取得します
-      tags:
-      - post
-  /api/departments:
-    get:
-      consumes:
-      - application/json
-      description: 全ての学部の情報を取得します
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/domain.Department'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: 学部情報を取得します
-      tags:
-      - department
-  /api/forum:
+  /api/forum/post:
     post:
       consumes:
       - application/json
@@ -246,7 +242,7 @@ paths:
       summary: フォーラムを作成します
       tags:
       - forum
-  /api/post:
+  /api/post/post:
     post:
       consumes:
       - application/json
@@ -272,6 +268,35 @@ paths:
               type: string
             type: object
       summary: ポストを作成します
+      tags:
+      - post
+  /api/posts/get:
+    get:
+      consumes:
+      - application/json
+      description: 指定したフォーラムのポスト一覧を取得します
+      parameters:
+      - description: フォーラムID
+        in: query
+        name: forum_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Post'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ポスト一覧を取得します
       tags:
       - post
   /api/user:
@@ -302,7 +327,7 @@ paths:
       summary: ユーザーを作成します
       tags:
       - user
-  /api/user/InfoGet:
+  /api/user/get:
     get:
       consumes:
       - application/json
@@ -358,6 +383,33 @@ paths:
               type: string
             type: object
       summary: ユーザーのログイン
+      tags:
+      - user
+  /api/user/update:
+    post:
+      consumes:
+      - application/json
+      description: 指定したユーザーの情報を修正します
+      parameters:
+      - description: ユーザーID
+        in: query
+        name: userID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.User'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: ユーザー情報を修正します
       tags:
       - user
 swagger: "2.0"

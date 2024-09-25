@@ -48,7 +48,7 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 // @Param        courseID  query     string  true  "コースID"
 // @Success      200      {object}  domain.Course
 // @Failure      404      {object}  map[string]string
-// @Router       /api/Course [get]
+// @Router       /api/course [get]
 func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
 	//メソッドチェック
 	if r.Method != http.MethodGet {
