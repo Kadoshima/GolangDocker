@@ -102,6 +102,23 @@ definitions:
       updatedAt:
         type: string
     type: object
+  reqres.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  reqres.LoginRequest:
+    properties:
+      password:
+        type: string
+      userID:
+        type: integer
+    type: object
+  reqres.LoginSuccessResponse:
+    properties:
+      token:
+        type: string
+    type: object
 host: os3-378-22222.vs.sakura.ne.jp:8000
 info:
   contact:
@@ -352,6 +369,32 @@ paths:
               type: string
             type: object
       summary: ユーザー情報を取得します
+      tags:
+      - user
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: ユーザーがシステムにログインします
+      parameters:
+      - description: ログイン情報
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/reqres.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功時のトークン
+          schema:
+            $ref: '#/definitions/reqres.LoginSuccessResponse'
+        "400":
+          description: バリデーションエラー
+          schema:
+            $ref: '#/definitions/reqres.ErrorResponse'
+      summary: ユーザーのログイン
       tags:
       - user
   /api/user/update:
