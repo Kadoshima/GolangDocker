@@ -22,6 +22,8 @@ services:
       --innodb_file_per_table=1
     ports:
       - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -34,3 +36,6 @@ services:
       - PMA_PORT=3306
     depends_on:
       - db
+
+volumes:
+  db_data:
