@@ -2,6 +2,7 @@ package action
 
 import (
 	"backend/adapter/api/middleware"
+	"backend/adapter/api/response"
 	"backend/domain"
 	"backend/usecase"
 	"encoding/json"
@@ -29,14 +30,14 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase useca
 
 	// JSONリクエストボディからuser構造体をデコードする
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, "Invalid request body")
 		return
 	}
 
 	//UserUseCaseを使ってユーザーを作成
 	if err := userUseCase.CreateUser(&user); err != nil {
 		log.Println(err)
-		http.Error(w, "Could not create user", http.StatusInternalServerError)
+		response.WriteJSONErrorResponse(w, "Could not create user")
 		return
 	}
 
@@ -60,21 +61,21 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request, userUseCase useca
 // @Router       /api/user/get [get]
 func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
 	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		response.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// コンテキストからユーザーIDを取得
 	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
 	if !ok {
-		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
+		response.WriteJSONErrorResponse(w, "User ID not found in context")
 		return
 	}
 
 	//UserInfoGetを使ってユーザー情報取得
 	user, err := userUseCase.UserInfoGet(userID)
 	if err != nil {
-		http.Error(w, "No user", http.StatusInternalServerError)
+		response.WriteJSONErrorResponse(w, "No user")
 		return
 	}
 
@@ -105,20 +106,19 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 // @Router       /api/user/update [post]
 func UpdateUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.UserUseCase) {
 	if r.Method != http.MethodPut {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		response.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	var user domain.User
 	// JSONリクエストボディからuser構造体をデコードする
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, "Invalid request body")
 		return
 	}
 	// UserInfoUpdateを使ってユーザー情報更新
 	if err := userUseCase.UserInfoUpdate(&user); err != nil {
-		log.Println(err)
-		http.Error(w, "Could not update user", http.StatusInternalServerError)
+		response.WriteJSONErrorResponse(w, "Could not update user")
 		return
 	}
 	// 成功レスポンス

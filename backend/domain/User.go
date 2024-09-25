@@ -47,3 +47,7 @@ func (u *User) GeneratePass() error {
 	// byteのスライスを返す
 	return nil
 }
+
+func (u *User) StudentIDtoUserID(studentID string) (int, error) {
+	return 0, nil
+}

@@ -1,6 +1,7 @@
 package action
 
 import (
+	"backend/adapter/api/response"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -31,14 +32,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 
 	// JSONリクエストボディをデコードしてmapにする
 	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
-		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, "Invalid request body")
 		return
 	}
 
 	// requestBodyからuserIDを取り出し、string型として扱う
 	userIDFloat, ok := requestBody["userID"].(float64)
 	if !ok {
-		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, "Invalid userID")
 		return
 	}
 	// userIDをintに変換
@@ -47,14 +48,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 	// requestBodyからuserIDを取り出し、string型として扱う
 	password, ok2 := requestBody["password"].(string)
 	if !ok2 {
-		http.Error(w, "Invalid userID", http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, "Invalid userID")
 		return
 	}
 
 	// authUserUseCaseを利用して、ユーザー認証を実装
 	auth, err := authUserUseCase.Login(userID, password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		response.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
