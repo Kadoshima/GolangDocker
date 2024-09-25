@@ -18,7 +18,7 @@ func NewForumRepository(db *sql.DB) *ForumRepositoryImpl {
 func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 	// forumsテーブルから全てのフォーラムを取得
 	rows, err := fr.db.Query(
-		`SELECT id, title, description, created_by, status, visibility, category, num_posts, attachments,
+		`SELECT id, title, description, created_by, status, visibility, category, num_posts, attachments
 		FROM forums`,
 	)
 	if err != nil {
@@ -30,12 +30,20 @@ func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 
 	for rows.Next() {
 		var forum domain.Forums
+		var attachmentsJSON []byte
+
 		err := rows.Scan(
 			&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-			&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.Attachments,
+			&forum.Visibility, &forum.Category, &forum.NumPosts, &attachmentsJSON,
 		)
 		if err != nil {
 			return nil, err
+		}
+
+		if len(attachmentsJSON) > 0 {
+			if err = json.Unmarshal(attachmentsJSON, &forum.Attachments); err != nil {
+				return nil, err
+			}
 		}
 
 		//// 各フォーラムのモデレーターを取得
