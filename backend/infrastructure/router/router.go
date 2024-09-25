@@ -31,7 +31,7 @@ func SetupRouter(db *sql.DB,
 		action.CreateUserHandler(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
-	mux.HandleFunc("/api/user/InfoGet", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/user/get", func(w http.ResponseWriter, r *http.Request) {
 		action.GetUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
@@ -39,47 +39,47 @@ func SetupRouter(db *sql.DB,
 		action.LoginHandler(w, r, authUseCase) // useCaseをハンドラーに渡す
 	})
 
-	mux.HandleFunc("/api/user/InfoUpdate", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/user/update", func(w http.ResponseWriter, r *http.Request) {
 		action.UpdateUserInfo(w, r, userUseCase) // useCaseをハンドラーに渡す
 	})
 
 	// 新しい掲示板(Forum)を作成するAPI
-	mux.Handle("/api/CreateForum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/forum/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.CreateForumAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// 掲示板情報を取得する
-	mux.Handle("/api/GetForum", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/forum/get", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.GetForumsAction(w, r, forumUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// 新しいpostを作成するAPI
-	mux.Handle("/api/Post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/post/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.CreatePostAction(w, r, postUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// forumに対応するpost群を取る
-	mux.Handle("/api/GetPosts", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/api/posts/get", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.GetPostsAction(w, r, postUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	// 全てのCourse情報の取得
-	mux.HandleFunc("/api/allCourse", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/courses/get", func(w http.ResponseWriter, r *http.Request) {
 		action.GetAllCourseInfoAction(w, r, courseUseCase) // useCaseをハンドラーに渡す
 	})
 
 	// Course情報の取得
-	mux.HandleFunc("/api/Course", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/course", func(w http.ResponseWriter, r *http.Request) {
 		action.GetCourseInfoAction(w, r, courseUseCase) // useCaseをハンドラーに渡す
 	})
 
 	// Department情報の取得
-	mux.HandleFunc("/api/allDepartments", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/departments/get", func(w http.ResponseWriter, r *http.Request) {
 		action.GetAllDepartmentAction(w, r, departmentUseCase) // useCaseをハンドラーに渡す
 	})
 
 	// Department情報の取得
-	mux.HandleFunc("/api/departments", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/api/department/get", func(w http.ResponseWriter, r *http.Request) {
 		action.GetDepartmentAction(w, r, departmentUseCase) // useCaseをハンドラーに渡す
 	})
 
