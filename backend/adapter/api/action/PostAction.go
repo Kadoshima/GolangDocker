@@ -2,7 +2,7 @@ package action
 
 import (
 	"backend/adapter/api/middleware"
-	"backend/adapter/api/response"
+	"backend/adapter/api/reqres"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -30,21 +30,21 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 
 	// メソッドチェック
 	if r.Method != http.MethodPost {
-		response.WriteJSONErrorResponse(w, "Invalid request method")
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// コンテキストからユーザーIDを取得
 	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
 	if !ok {
-		response.WriteJSONErrorResponse(w, "User ID not found in context")
+		reqres.WriteJSONErrorResponse(w, "User ID not found in context")
 		return
 	}
 
 	// 引数を受け取ってdomain.Postにdecode
 	var postRequest postDto
 	if err := json.NewDecoder(r.Body).Decode(&postRequest); err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
@@ -57,14 +57,14 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 		postRequest.ParentID,
 	)
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
 	// 作成された投稿をレスポンスとして返す
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(createdPost); err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
@@ -84,35 +84,35 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 func GetPostsAction(w http.ResponseWriter, r *http.Request, useCase usecase.PostUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodGet {
-		response.WriteJSONErrorResponse(w, "Invalid request method")
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// クエリパラメータから forumID を取得
 	forumIDStr := r.URL.Query().Get("forum_id")
 	if forumIDStr == "" {
-		response.WriteJSONErrorResponse(w, "forum_id is required")
+		reqres.WriteJSONErrorResponse(w, "forum_id is required")
 		return
 	}
 
 	// forumID を整数に変換
 	forumID, err := strconv.Atoi(forumIDStr)
 	if err != nil {
-		response.WriteJSONErrorResponse(w, "Invalid forum_id")
+		reqres.WriteJSONErrorResponse(w, "Invalid forum_id")
 		return
 	}
 
 	// UseCaseを呼び出して指定されたフォーラムの投稿を取得
 	posts, err := useCase.GetPosts(forumID)
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
 	// 投稿のリストをレスポンスとして返す
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(posts); err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 }

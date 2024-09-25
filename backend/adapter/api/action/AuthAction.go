@@ -1,7 +1,7 @@
 package action
 
 import (
-	"backend/adapter/api/response"
+	"backend/adapter/api/reqres"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -13,10 +13,11 @@ import (
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        body  body      map[string]interface{}  true  "ログイン情報"
-// @Success      200   {object}  map[string]string       "成功時のトークン"
-// @Failure      400   {object}  map[string]string       "バリデーションエラー"
+// @Param        body  body      models.LoginRequest  true  "ログイン情報"
+// @Success      200   {object}  models.LoginSuccessResponse  "成功時のトークン"
+// @Failure      400   {object}  models.ErrorResponse         "バリデーションエラー"
 // @Router       /api/user/login [post]
+
 func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -32,14 +33,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 
 	// JSONリクエストボディをデコードしてmapにする
 	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
-		response.WriteJSONErrorResponse(w, "Invalid request body")
+		reqres.WriteJSONErrorResponse(w, "Invalid request body")
 		return
 	}
 
 	// requestBodyからuserIDを取り出し、string型として扱う
 	userIDFloat, ok := requestBody["userID"].(float64)
 	if !ok {
-		response.WriteJSONErrorResponse(w, "Invalid userID")
+		reqres.WriteJSONErrorResponse(w, "Invalid userID")
 		return
 	}
 	// userIDをintに変換
@@ -48,14 +49,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 	// requestBodyからuserIDを取り出し、string型として扱う
 	password, ok2 := requestBody["password"].(string)
 	if !ok2 {
-		response.WriteJSONErrorResponse(w, "Invalid userID")
+		reqres.WriteJSONErrorResponse(w, "Invalid userID")
 		return
 	}
 
 	// authUserUseCaseを利用して、ユーザー認証を実装
 	auth, err := authUserUseCase.Login(userID, password)
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 

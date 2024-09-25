@@ -1,7 +1,7 @@
 package action
 
 import (
-	"backend/adapter/api/response"
+	"backend/adapter/api/reqres"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -21,20 +21,20 @@ func GetAllDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usec
 
 	// メソッドチェック
 	if r.Method != http.MethodGet {
-		response.WriteJSONErrorResponse(w, "Invalid request method")
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// Department情報を取得
 	departments, err := useCase.GetAllDepartments()
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
 	// スライスの長さとnilチェック
 	if len(departments) <= 0 {
-		response.WriteJSONErrorResponse(w, "unexpected error")
+		reqres.WriteJSONErrorResponse(w, "unexpected error")
 		return
 	}
 
@@ -65,27 +65,27 @@ func GetDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usecase
 
 	// メソッドチェック
 	if r.Method != http.MethodGet {
-		response.WriteJSONErrorResponse(w, "Invalid request method")
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	departmentIDMap := make(map[string]string)
 
 	if err := json.NewDecoder(r.Body).Decode(&departmentIDMap); err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
 	departmentIDInt, err := strconv.Atoi(departmentIDMap["departmentID"])
 	if err != nil {
-		response.WriteJSONErrorResponse(w, "unexpected error")
+		reqres.WriteJSONErrorResponse(w, "unexpected error")
 		return
 	}
 
 	// Department情報を取得
 	department, err := useCase.GetDepartmentInfo(departmentIDInt)
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 

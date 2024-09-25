@@ -1,4 +1,4 @@
-package response
+package reqres
 
 import (
 	"encoding/json"
@@ -7,6 +7,10 @@ import (
 
 type ErrorResponse struct {
 	Message string `json:"message"`
+}
+
+type LoginSuccessResponse struct {
+	Token string `json:"token"`
 }
 
 func WriteJSONErrorResponse(w http.ResponseWriter, errorMessage string) {

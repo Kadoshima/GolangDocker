@@ -381,53 +381,6 @@
                 }
             }
         },
-        "/api/user/login": {
-            "post": {
-                "description": "ユーザーがシステムにログインします",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "ユーザーのログイン",
-                "parameters": [
-                    {
-                        "description": "ログイン情報",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "成功時のトークン",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "バリデーションエラー",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/user/update": {
             "post": {
                 "description": "指定したユーザーの情報を修正します",

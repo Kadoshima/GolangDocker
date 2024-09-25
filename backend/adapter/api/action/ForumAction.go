@@ -2,7 +2,7 @@ package action
 
 import (
 	"backend/adapter/api/middleware"
-	"backend/adapter/api/response"
+	"backend/adapter/api/reqres"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -89,21 +89,21 @@ func CreateForumAction(w http.ResponseWriter, r *http.Request, useCase usecase.F
 func GetForumsAction(w http.ResponseWriter, r *http.Request, useCase usecase.ForumUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodGet {
-		response.WriteJSONErrorResponse(w, "Invalid request method")
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// UseCaseを呼び出してフォーラムのリストを取得
 	forums, err := useCase.GetForum()
 	if err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 
 	// フォーラムのリストをレスポンスとして返す
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(forums); err != nil {
-		response.WriteJSONErrorResponse(w, err.Error())
+		reqres.WriteJSONErrorResponse(w, err.Error())
 		return
 	}
 }
