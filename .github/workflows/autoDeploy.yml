@@ -23,7 +23,7 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd GolangDocker/
+            cd /home/ubuntu/GolangDocker
             git pull origin main
             docker compose down
             docker compose up -d --build
