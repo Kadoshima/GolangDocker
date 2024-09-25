@@ -7,6 +7,15 @@ import (
 	"strconv"
 )
 
+// GetAllDepartmentAction GetDepartmentsHandler godoc
+// @Summary      学部情報を取得します
+// @Description  全ての学部の情報を取得します
+// @Tags         department
+// @Accept       json
+// @Produce      json
+// @Success      200      {object}  []domain.Department
+// @Failure      500      {object}  map[string]string
+// @Router       /api/departments/get [get]
 func GetAllDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usecase.DepartmentUseCase) {
 
 	// メソッドチェック
@@ -48,9 +57,9 @@ func GetAllDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usec
 // @Tags         department
 // @Accept       json
 // @Produce      json
-// @Success      200      {object}  []domain.Department
+// @Success      200      {object}  domain.Department
 // @Failure      500      {object}  map[string]string
-// @Router       /api/departments [get]
+// @Router       /api/department/get [get]
 func GetDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usecase.DepartmentUseCase) {
 
 	// メソッドチェック

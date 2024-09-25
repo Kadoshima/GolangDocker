@@ -24,7 +24,7 @@ type postDto struct {
 // @Param        post  body      domain.Post  true  "ポストデータ"
 // @Success      201   {object}  domain.Post
 // @Failure      400   {object}  map[string]string
-// @Router       /api/post [post]
+// @Router       /api/post/post [post]
 func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.PostUseCase) {
 
 	// メソッドチェック
@@ -80,7 +80,7 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 // @Param        forum_id  query     int  true  "フォーラムID"
 // @Success      200       {array}   domain.Post
 // @Failure      404       {object}  map[string]string
-// @Router       /api/GetPosts [get]
+// @Router       /api/posts/get [get]
 func GetPostsAction(w http.ResponseWriter, r *http.Request, useCase usecase.PostUseCase) {
 	// メソッドチェック
 	if r.Method != http.MethodGet {
