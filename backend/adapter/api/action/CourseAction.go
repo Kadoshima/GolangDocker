@@ -1,6 +1,7 @@
 package action
 
 import (
+	"backend/adapter/api/reqres"
 	"backend/usecase"
 	"encoding/json"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
 	//メソッドチェック
 	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		reqres.WriteJSONErrorResponse(w, "Method error")
 		return
 	}
 
@@ -33,7 +34,7 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 	w.Header().Set("Content-Type", "application/json")
 
 	if err := json.NewEncoder(w).Encode(courseMap); err != nil {
-		println(err.Error())
+		reqres.WriteJSONErrorResponse(w, "Json encode error")
 	}
 
 	return
@@ -52,7 +53,7 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
 	//メソッドチェック
 	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
@@ -68,7 +69,8 @@ func GetCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase
 	// Course情報を取ってくる
 	course, err := useCase.GetCourseInfo(courseIDInt)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		reqres.WriteJSONErrorResponse(w, err.Error())
+		return
 	}
 
 	courseMap := make(map[int]string) // マップの初期化

@@ -354,37 +354,6 @@ paths:
       summary: ユーザー情報を取得します
       tags:
       - user
-  /api/user/login:
-    post:
-      consumes:
-      - application/json
-      description: ユーザーがシステムにログインします
-      parameters:
-      - description: ログイン情報
-        in: body
-        name: body
-        required: true
-        schema:
-          additionalProperties: true
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 成功時のトークン
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: バリデーションエラー
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: ユーザーのログイン
-      tags:
-      - user
   /api/user/update:
     post:
       consumes:
