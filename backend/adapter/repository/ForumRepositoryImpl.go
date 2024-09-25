@@ -18,7 +18,7 @@ func NewForumRepository(db *sql.DB) *ForumRepositoryImpl {
 func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 	// forumsテーブルから全てのフォーラムを取得
 	rows, err := fr.db.Query(
-		`SELECT id, title, description, created_by, status, visibility, category, num_posts
+		`SELECT id, title, description, created_by, status, visibility, category, num_posts, attachments,
 		FROM forums`,
 	)
 	if err != nil {
@@ -32,7 +32,7 @@ func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 		var forum domain.Forums
 		err := rows.Scan(
 			&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-			&forum.Visibility, &forum.Category, &forum.NumPosts,
+			&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.Attachments,
 		)
 		if err != nil {
 			return nil, err
