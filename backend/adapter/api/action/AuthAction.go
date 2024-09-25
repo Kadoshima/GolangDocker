@@ -13,11 +13,10 @@ import (
 // @Tags         user
 // @Accept       json
 // @Produce      json
-// @Param        body  body      models.LoginRequest  true  "ログイン情報"
-// @Success      200   {object}  models.LoginSuccessResponse  "成功時のトークン"
-// @Failure      400   {object}  models.ErrorResponse         "バリデーションエラー"
+// @Param        body  body      reqres.LoginRequest  true  "ログイン情報"
+// @Success      200   {object}  reqres.LoginSuccessResponse  "成功時のトークン"
+// @Failure      400   {object}  reqres.ErrorResponse         "バリデーションエラー"
 // @Router       /api/user/login [post]
-
 func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)

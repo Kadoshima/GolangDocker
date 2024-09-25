@@ -387,6 +387,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/login": {
+            "post": {
+                "description": "ユーザーがシステムにログインします",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "ユーザーのログイン",
+                "parameters": [
+                    {
+                        "description": "ログイン情報",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reqres.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功時のトークン",
+                        "schema": {
+                            "$ref": "#/definitions/reqres.LoginSuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "バリデーションエラー",
+                        "schema": {
+                            "$ref": "#/definitions/reqres.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/update": {
             "post": {
                 "description": "指定したユーザーの情報を修正します",
@@ -581,6 +621,33 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "reqres.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "reqres.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "reqres.LoginSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }
