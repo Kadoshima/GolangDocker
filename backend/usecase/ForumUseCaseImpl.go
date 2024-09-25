@@ -19,7 +19,7 @@ func NewForumUseCase(forumRepository repository.ForumRepository, jwtService *aut
 	}
 }
 
-func (fu *ForumUseCaseImpl) CreateForum(title, description string, createdBy, status, visibility int, category string) (*domain.Forums, error) {
+func (fu *ForumUseCaseImpl) CreateForum(title, description string, createdBy, status, visibility int, category string, attachments []string) (*domain.Forums, error) {
 	forum := &domain.Forums{
 		Title:       title,
 		Description: description,
@@ -29,6 +29,7 @@ func (fu *ForumUseCaseImpl) CreateForum(title, description string, createdBy, st
 		Category:    category,
 		NumPosts:    0,
 		Moderators:  []int{createdBy},
+		Attachments: attachments,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
