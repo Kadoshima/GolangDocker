@@ -53,7 +53,7 @@ https://drive.google.com/file/d/14lBC3PIAs16_IP9kmMKwEzsawloZCvrv/view?usp=shari
 # Golandを使ったdockerの自動再起動について
 プロジェクトファイルのGolangDocker/backendの中に `hotreload.sh` というファイルがある
 このファイルを以下の手順で、「Goファイルが保存された時に自動実行する」という約束を作成することができる。
-https://www.notion.so/Docker-Goland-4c0295dee24a4d119f84db0cd17ae0bc?pvs=4
+https://aquatic-squid-130.notion.site/Docker-Goland-4c0295dee24a4d119f84db0cd17ae0bc?pvs=4
 
 # ER図 (2024年9月23日)
 ![Untitled diagram-2024-09-22-174526](https://github.com/user-attachments/assets/670afb74-f627-4666-b469-a8061b48f639)
