@@ -25,3 +25,15 @@ func (ur *AuthRepositoryImpl) GetPasswordByUserID(userID int) (string, error) {
 	return password, nil
 
 }
+
+func (ur *AuthRepositoryImpl) GetUserIDByStudentID(studentID string) (int, error) {
+	var userID int
+	err := ur.db.QueryRow(
+		"SELECT id FROM `users` WHERE `student_id`=?", studentID,
+	).Scan(&userID)
+
+	if err != nil {
+		return -1, err
+	}
+	return userID, nil
+}

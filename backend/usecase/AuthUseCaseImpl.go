@@ -22,6 +22,9 @@ func NewAuthUseCase(authRepository repository.AuthRepository, jwtService *auth.J
 
 func (au *AuthUseCaseImpl) Login(userID int, password string) (string, error) {
 
+	println("hello")
+	println(userID)
+
 	// パスワードを取得
 	hashedPassword, err := au.AuthRepository.GetPasswordByUserID(userID)
 	if err != nil {
@@ -40,4 +43,15 @@ func (au *AuthUseCaseImpl) Login(userID int, password string) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (au *AuthUseCaseImpl) GetUserIDByStudentID(studentID string) (int, error) {
+
+	// studentIDからuserIDの取得
+	userID, err := au.AuthRepository.GetUserIDByStudentID(studentID)
+	if err != nil {
+		return -1, errors.New("could not retrieve user password")
+	}
+
+	return userID, nil
 }
