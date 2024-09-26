@@ -41,6 +41,7 @@ func (cr *CourseRepositoryImpl) SelectAllCourse() ([]*domain.Course, error) {
 
 func (cr *CourseRepositoryImpl) SelectCourse(courseID int) (*domain.Course, error) {
 	course := &domain.Course{}
+	println(courseID)
 	err := cr.db.QueryRow(
 		"SELECT id, department_id, name FROM courses WHERE id = ?",
 		courseID,
@@ -48,6 +49,7 @@ func (cr *CourseRepositoryImpl) SelectCourse(courseID int) (*domain.Course, erro
 	if err != nil {
 		return nil, err
 	}
+	println(course.ID)
 	return course, nil
 }
 

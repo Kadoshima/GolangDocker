@@ -69,14 +69,14 @@ func GetDepartmentAction(w http.ResponseWriter, r *http.Request, useCase usecase
 		return
 	}
 
-	departmentIDMap := make(map[string]string)
-
-	if err := json.NewDecoder(r.Body).Decode(&departmentIDMap); err != nil {
-		reqres.WriteJSONErrorResponse(w, err.Error())
+	// クエリパラメータから forumID を取得
+	departmentID := r.URL.Query().Get("department_id")
+	if departmentID == "" {
+		reqres.WriteJSONErrorResponse(w, "department_id is required")
 		return
 	}
 
-	departmentIDInt, err := strconv.Atoi(departmentIDMap["departmentID"])
+	departmentIDInt, err := strconv.Atoi(departmentID)
 	if err != nil {
 		reqres.WriteJSONErrorResponse(w, "unexpected error")
 		return

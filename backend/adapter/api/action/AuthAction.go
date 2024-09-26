@@ -23,12 +23,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 		return
 	}
 
-	var userIDFloat float64
-	var userID int
 	var password string
 
 	// リクエストボディを保持するためのmap
-	var requestBody map[string]interface{}
+	var requestBody map[string]string
 
 	// JSONリクエストボディをデコードしてmapにする
 	if err := json.NewDecoder(r.Body).Decode(&requestBody); err != nil {
@@ -37,19 +35,24 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 	}
 
 	// requestBodyからuserIDを取り出し、string型として扱う
-	userIDFloat, ok := requestBody["userID"].(float64)
+	studentID, ok := requestBody["student_id"]
+
 	if !ok {
-		reqres.WriteJSONErrorResponse(w, "Invalid userID")
+		reqres.WriteJSONErrorResponse(w, "Invalid student_id")
 		return
 	}
-	// userIDをintに変換
-	userID = int(userIDFloat)
 
-	// requestBodyからuserIDを取り出し、string型として扱う
-	password, ok2 := requestBody["password"].(string)
+	// requestBodyからpassを取り出し、string型として扱う
+	password, ok2 := requestBody["password"]
 	if !ok2 {
-		reqres.WriteJSONErrorResponse(w, "Invalid userID")
+		reqres.WriteJSONErrorResponse(w, "Invalid password")
 		return
+	}
+
+	//studentIDからuserIDの取得
+	userID, err := authUserUseCase.GetUserIDByStudentID(studentID)
+	if err != nil {
+		reqres.WriteJSONErrorResponse(w, err.Error())
 	}
 
 	// authUserUseCaseを利用して、ユーザー認証を実装
@@ -65,18 +68,3 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, authUserUseCase usecas
 		"token": auth,
 	})
 }
-
-//func Atest(w http.ResponseWriter, r *http.Request, authUserUseCase usecase.AuthUseCase) {
-//
-//	// コンテキストからユーザーIDを取得
-//	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
-//	if !ok {
-//		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
-//		return
-//	}
-//
-//	// 取得したUserIDを利用して処理を行う
-//	println(userID)
-//
-//	return
-//}
