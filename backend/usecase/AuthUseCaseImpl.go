@@ -22,9 +22,6 @@ func NewAuthUseCase(authRepository repository.AuthRepository, jwtService *auth.J
 
 func (au *AuthUseCaseImpl) Login(userID int, password string) (string, error) {
 
-	println("hello")
-	println(userID)
-
 	// パスワードを取得
 	hashedPassword, err := au.AuthRepository.GetPasswordByUserID(userID)
 	if err != nil {
