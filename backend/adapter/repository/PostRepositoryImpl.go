@@ -17,7 +17,7 @@ func NewPostRepository(db *sql.DB) *PostRepositoryImpl {
 func (pr *PostRepositoryImpl) SelectPost(forumID int) ([]domain.Post, error) {
 	// データベースからpostsを取得
 	rows, err := pr.db.Query(
-		`SELECT id, forum_id, user_id, content, tags, status, parent_id
+		`SELECT id, forum_id, user_id, content, status, parent_id
         FROM posts WHERE forum_id = ?`, forumID,
 	)
 	if err != nil {
@@ -33,7 +33,7 @@ func (pr *PostRepositoryImpl) SelectPost(forumID int) ([]domain.Post, error) {
 		var parentID sql.NullInt64
 
 		err := rows.Scan(
-			&post.ID, &post.ForumId, &post.UserId, &post.Content, &post.Tags,
+			&post.ID, &post.ForumId, &post.UserId, &post.Content,
 			&post.Status, &parentID,
 		)
 		if err != nil {
@@ -71,9 +71,9 @@ func (pr *PostRepositoryImpl) CreatePost(post *domain.Post) (*domain.Post, error
 
 	// postsテーブルへの挿入
 	result, err := tx.Exec(
-		`INSERT INTO posts (forum_id, user_id, content, tags, status, parent_id, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-		post.ForumId, post.UserId, post.Content, post.Tags, post.Status, parentID, post.CreatedAt, post.UpdatedAt,
+		`INSERT INTO posts (forum_id, user_id, content, status, parent_id, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		post.ForumId, post.UserId, post.Content, post.Status, parentID, post.CreatedAt, post.UpdatedAt,
 	)
 	if err != nil {
 		tx.Rollback()
@@ -88,16 +88,16 @@ func (pr *PostRepositoryImpl) CreatePost(post *domain.Post) (*domain.Post, error
 	post.ID = int(postID)
 
 	// 添付ファイルの挿入
-	for _, attachment := range post.Attachments {
-		_, err := tx.Exec(
-			"INSERT INTO post_attachments (post_id, attachment) VALUES (?, ?)",
-			post.ID, attachment,
-		)
-		if err != nil {
-			tx.Rollback()
-			return nil, err
-		}
-	}
+	//for _, attachment := range post.Attachments {
+	//	_, err := tx.Exec(
+	//		"INSERT INTO post_attachments (post_id, attachment) VALUES (?, ?)",
+	//		post.ID, attachment,
+	//	)
+	//	if err != nil {
+	//		tx.Rollback()
+	//		return nil, err
+	//	}
+	//}
 
 	err = tx.Commit()
 	if err != nil {
@@ -119,9 +119,9 @@ func (pr *PostRepositoryImpl) UpdatePost(post *domain.Post) (*domain.Post, error
 
 	// postsテーブルの更新
 	_, err = tx.Exec(
-		`UPDATE posts SET forum_id = ?, user_id = ?, content = ?, tags = ?, status = ?, parent_id = ?, updated_at = ?
+		`UPDATE posts SET forum_id = ?, user_id = ?, content = ?, status = ?, parent_id = ?, updated_at = ?
 		WHERE id = ?`,
-		post.ForumId, post.UserId, post.Content, post.Tags, post.Status, parentID, post.UpdatedAt, post.ID,
+		post.ForumId, post.UserId, post.Content, post.Status, parentID, post.UpdatedAt, post.ID,
 	)
 	if err != nil {
 		tx.Rollback()
@@ -162,15 +162,6 @@ func (pr *PostRepositoryImpl) DeletePost(postID int) error {
 	if err != nil {
 		return err
 	}
-
-	// 添付ファイルの削除
-	//_, err = tx.Exec(
-	//	"DELETE FROM post_attachments WHERE post_id = ?", postID,
-	//)
-	//if err != nil {
-	//	tx.Rollback()
-	//	return err
-	//}
 
 	// ポストの削除
 	_, err = tx.Exec(

@@ -7,7 +7,6 @@ type Post struct {
 	ForumId     int
 	UserId      int
 	Content     string
-	Tags        string
 	Status      int
 	ParentId    int
 	Attachments string
