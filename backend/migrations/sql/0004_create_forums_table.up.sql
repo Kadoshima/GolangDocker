@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS forums (
     visibility INT NOT NULL,
     category VARCHAR(100),
     num_posts INT DEFAULT 0,
-    attachments JSON,
+    attachments VARCHAR(512),
     moderators JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
