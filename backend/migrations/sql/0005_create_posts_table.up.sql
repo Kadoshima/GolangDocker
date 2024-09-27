@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS posts (
     forum_id INT NOT NULL,
     user_id INT NOT NULL,
     content TEXT NOT NULL,
-    tags VARCHAR(255),
     status INT NOT NULL,
     parent_id INT DEFAULT NULL,
     attachments VARCHAR(512),

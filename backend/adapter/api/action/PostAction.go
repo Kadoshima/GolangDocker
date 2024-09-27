@@ -12,7 +12,6 @@ import (
 type postDto struct {
 	ForumID  int    `json:"forum_id"`
 	Content  string `json:"content"`
-	Tags     string `json:"tags"`
 	ParentID int    `json:"parent_id"`
 }
 
@@ -53,7 +52,6 @@ func CreatePostAction(w http.ResponseWriter, r *http.Request, useCase usecase.Po
 		postRequest.ForumID,
 		userID,
 		postRequest.Content,
-		postRequest.Tags,
 		postRequest.ParentID,
 	)
 	if err != nil {
