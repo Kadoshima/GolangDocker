@@ -26,16 +26,23 @@ func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 	defer rows.Close()
 
 	var forums []domain.Forums
+	var attachment sql.NullString
 
 	for rows.Next() {
 		var forum domain.Forums
 
 		err := rows.Scan(
 			&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-			&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.Attachments,
+			&forum.Visibility, &forum.Category, &forum.NumPosts, &attachment,
 		)
 		if err != nil {
 			return nil, err
+		}
+
+		if attachment.Valid {
+			forum.Attachments = attachment.String
+		} else {
+			forum.Attachments = ""
 		}
 
 		//// 各フォーラムのモデレーターを取得
