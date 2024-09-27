@@ -10,7 +10,7 @@ type Post struct {
 	Tags        string
 	Status      int
 	ParentId    int
-	Attachments []string
+	Attachments string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

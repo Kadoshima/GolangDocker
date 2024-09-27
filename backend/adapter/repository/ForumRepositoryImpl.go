@@ -3,7 +3,6 @@ package repository
 import (
 	"backend/domain"
 	"database/sql"
-	"encoding/json"
 	"time"
 )
 
@@ -30,20 +29,13 @@ func (fr *ForumRepositoryImpl) SelectAllForums() ([]domain.Forums, error) {
 
 	for rows.Next() {
 		var forum domain.Forums
-		var attachmentsJSON []byte
 
 		err := rows.Scan(
 			&forum.ID, &forum.Title, &forum.Description, &forum.CreatedBy, &forum.Status,
-			&forum.Visibility, &forum.Category, &forum.NumPosts, &attachmentsJSON,
+			&forum.Visibility, &forum.Category, &forum.NumPosts, &forum.Attachments,
 		)
 		if err != nil {
 			return nil, err
-		}
-
-		if len(attachmentsJSON) > 0 {
-			if err = json.Unmarshal(attachmentsJSON, &forum.Attachments); err != nil {
-				return nil, err
-			}
 		}
 
 		//// 各フォーラムのモデレーターを取得
@@ -124,7 +116,6 @@ func (fr *ForumRepositoryImpl) CreateForum(forum *domain.Forums) (*domain.Forums
 	}
 
 	// forumsテーブルへの挿入
-	attachmentsJSON, err := json.Marshal(forum.Attachments)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +124,7 @@ func (fr *ForumRepositoryImpl) CreateForum(forum *domain.Forums) (*domain.Forums
 		`INSERT INTO forums (title, description, created_by, status, visibility, category, num_posts, attachments, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		forum.Title, forum.Description, forum.CreatedBy, forum.Status, forum.Visibility,
-		forum.Category, forum.NumPosts, attachmentsJSON, forum.CreatedAt, forum.UpdatedAt,
+		forum.Category, forum.NumPosts, forum.Attachments, forum.CreatedAt, forum.UpdatedAt,
 	)
 	if err != nil {
 		tx.Rollback()
