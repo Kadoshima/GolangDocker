@@ -8,12 +8,12 @@ import (
 )
 
 type ForumDTO struct {
-	Title       string   `json:"title" validate:"required"`
-	Description string   `json:"description" validate:"required"`
-	Status      int      `json:"status" validate:"required,oneof=0 1"`     // 例: 0 = 非アクティブ, 1 = アクティブ
-	Visibility  int      `json:"visibility" validate:"required,oneof=0 1"` // 例: 0 = 非公開, 1 = 公開
-	Category    string   `json:"category" validate:"required"`
-	Attachments []string `json:"attachment" validate:"required"`
+	Title       string `json:"title" validate:"required"`
+	Description string `json:"description" validate:"required"`
+	Status      int    `json:"status" validate:"required,oneof=0 1"`     // 例: 0 = 非アクティブ, 1 = アクティブ
+	Visibility  int    `json:"visibility" validate:"required,oneof=0 1"` // 例: 0 = 非公開, 1 = 公開
+	Category    string `json:"category" validate:"required"`
+	Attachments string `json:"attachment" validate:"required"`
 }
 
 // CreateForumAction CreateForumHandler godoc
@@ -96,6 +96,9 @@ func GetForumsAction(w http.ResponseWriter, r *http.Request, useCase usecase.For
 	forums, err := useCase.GetForum()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	} else if len(forums) == 0 {
+		http.Error(w, "Forum not found", http.StatusNotFound)
 		return
 	}
 

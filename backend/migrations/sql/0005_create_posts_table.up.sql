@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS posts (
     tags VARCHAR(255),
     status INT NOT NULL,
     parent_id INT DEFAULT NULL,
-    attachments JSON,
+    attachments VARCHAR(511),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (forum_id) REFERENCES forums(id),

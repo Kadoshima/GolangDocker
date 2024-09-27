@@ -66,6 +66,7 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request, userUseCase usecase.Use
 
 	// コンテキストからユーザーIDを取得
 	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
+	print(userID)
 	if !ok {
 		http.Error(w, "User ID not found in context", http.StatusUnauthorized)
 		return
