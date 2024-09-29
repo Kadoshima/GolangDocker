@@ -7,5 +7,5 @@ type SupportUseCase interface {
 	SupportIsComplete(supportID int) (*domain.SupportRequest, error)
 	CloseSupportRequest(forumID int) (*domain.SupportRequest, error)
 	GetSupportRequest(supportID int) (*domain.SupportRequest, error)
-	GetAllSupportRequests() ([]*domain.SupportRequest, error)
+	GetDepartmentSupportRequests(userID int) ([]*domain.SupportRequest, error)
 }

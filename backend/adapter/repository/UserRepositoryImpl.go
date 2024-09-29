@@ -56,3 +56,25 @@ func (ur *UserRepositoryImpl) Update(user *domain.User, sql string, sqlArgument 
 	}
 	return nil
 }
+
+// 学籍番号（StudentID）からユーザーを取得する
+func (ur *UserRepositoryImpl) SelectByUserID(userID int) (*domain.User, error) {
+
+	user := &domain.User{}
+	err := ur.db.QueryRow(
+		"SELECT id, student_id, nickname, email, department_id, course_id FROM `users` WHERE `id` = ?",
+		userID,
+	).Scan(
+		&user.ID,
+		&user.StudentID,
+		&user.Nickname,
+		&user.Email,
+		&user.DepartmentID,
+		&user.CourseID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}

@@ -10,12 +10,14 @@ import (
 
 type SupportUseCaseImpl struct {
 	SupportRepository repository.SupportRepository
+	UserRepository    repository.UserRepository
 	JWTService        *auth.JWTService
 }
 
-func NewSupportUseCase(repository repository.SupportRepository, jwtService *auth.JWTService) *SupportUseCaseImpl {
+func NewSupportUseCase(SRepository repository.SupportRepository, URepository repository.UserRepository, jwtService *auth.JWTService) *SupportUseCaseImpl {
 	return &SupportUseCaseImpl{
-		SupportRepository: repository,
+		SupportRepository: SRepository,
+		UserRepository:    URepository,
 		JWTService:        jwtService,
 	}
 }
@@ -56,10 +58,15 @@ func (su *SupportUseCaseImpl) GetSupportRequest(forumID int) (*domain.SupportReq
 	return supportRequest, nil
 }
 
-// すべてのサポートリクエストを取得
-func (su *SupportUseCaseImpl) GetAllSupportRequests() ([]*domain.SupportRequest, error) {
+// 取得しにきたUserのDepartmentIDに沿ったサポートリクエストを取得
+func (su *SupportUseCaseImpl) GetDepartmentSupportRequests(userID int) ([]*domain.SupportRequest, error) {
+	// userIDをactionからもらってDepartmentIDに変換
+	user, err := su.UserRepository.SelectByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
 	// リポジトリからすべてのサポートリクエストを取得
-	supportRequests, err := su.SupportRepository.SelectSupport()
+	supportRequests, err := su.SupportRepository.SelectSupport(user.DepartmentID)
 	if err != nil {
 		return nil, err
 	}

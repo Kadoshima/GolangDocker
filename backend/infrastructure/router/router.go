@@ -88,9 +88,12 @@ func SetupRouter(db *sql.DB,
 	mux.Handle("/api/support/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.CreateSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
 	})))
+
+	// 自分の所属する学部に当てられたsupportを全てもら
 	mux.Handle("/api/support/get", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		action.GetSupportRequestsAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
+		action.GetDepartmentSupportRequests(w, r, supportUseCase) // useCaseをハンドラーに渡す
 	})))
+
 	mux.Handle("/api/support/close", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.CloseSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
 	})))

@@ -44,10 +44,11 @@ func CreateSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase 
 
 	// domain.SupportRequest オブジェクトを作成
 	supportRequest := &domain.SupportRequest{
-		ForumId:        supportRequestDto.ForumID,
-		PostId:         supportRequestDto.PostID,
-		RequestContent: supportRequestDto.RequestContent,
-		CreatedBy:      userID,
+		ForumId:           supportRequestDto.ForumID,
+		PostId:            supportRequestDto.PostID,
+		RequestContent:    supportRequestDto.RequestContent,
+		RequestDepartment: supportRequestDto.RequestDepartment,
+		CreatedBy:         userID,
 		// ステータスはユースケース内で設定されます
 	}
 
@@ -114,7 +115,7 @@ func CloseSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase u
 	}
 }
 
-// GetSupportRequestsAction godoc
+// GetDepartmentSupportRequests godoc
 // @Summary      サポートリクエスト一覧を取得します
 // @Description  すべてのサポートリクエストを取得します
 // @Tags         support_request
@@ -123,7 +124,7 @@ func CloseSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase u
 // @Success      200   {array}   domain.SupportRequest
 // @Failure      404   {object}  map[string]string
 // @Router       /api/support_requests [get]
-func GetSupportRequestsAction(w http.ResponseWriter, r *http.Request, useCase usecase.SupportUseCase) {
+func GetDepartmentSupportRequests(w http.ResponseWriter, r *http.Request, useCase usecase.SupportUseCase) {
 
 	// メソッドチェック
 	if r.Method != http.MethodGet {
@@ -131,8 +132,14 @@ func GetSupportRequestsAction(w http.ResponseWriter, r *http.Request, useCase us
 		return
 	}
 
+	userID, ok := r.Context().Value(middleware.UserContextKey).(int)
+	if !ok {
+		reqres.WriteJSONErrorResponse(w, "User ID not found in context")
+		return
+	}
+
 	// ユースケースを呼び出してサポートリクエストを取得
-	supportRequests, err := useCase.GetAllSupportRequests()
+	supportRequests, err := useCase.GetDepartmentSupportRequests(userID)
 	if err != nil {
 		reqres.WriteJSONErrorResponse(w, err.Error())
 		return

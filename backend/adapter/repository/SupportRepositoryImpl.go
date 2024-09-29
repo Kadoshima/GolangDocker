@@ -21,9 +21,9 @@ func (sr *SupportRepositoryImpl) CreateSupport(support domain.SupportRequest) (d
 	support.UpdatedAt = now
 
 	result, err := sr.db.Exec(
-		`INSERT INTO support_requests (forum_id, post_id, request_content, progress_status, created_at, updated_at)
-		 VALUES (?, ?, ?, ?, ?, ?)`,
-		support.ForumId, support.PostId, support.RequestContent, support.ProgressStatus, support.CreatedAt, support.UpdatedAt,
+		`INSERT INTO support_requests (forum_id, post_id, request_content, request_department, progress_status, created_at, updated_at)
+		 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		support.ForumId, support.PostId, support.RequestContent, support.RequestDepartment, support.ProgressStatus, support.CreatedAt, support.UpdatedAt,
 	)
 	if err != nil {
 		return support, err
@@ -38,9 +38,13 @@ func (sr *SupportRepositoryImpl) CreateSupport(support domain.SupportRequest) (d
 }
 
 // サポートリクエストの取得
-func (sr *SupportRepositoryImpl) SelectSupport() ([]domain.SupportRequest, error) {
+func (sr *SupportRepositoryImpl) SelectSupport(departmentID int) ([]domain.SupportRequest, error) {
 	rows, err := sr.db.Query(
-		`SELECT id, forum_id, post_id, request_content, progress_status, created_at, updated_at FROM support_requests`,
+		`SELECT id, forum_id, post_id, request_content, request_department, progress_status, created_at, updated_at 
+		FROM support_requests 
+		WHERE request_department = ?
+		ORDER BY created_at ASC
+		`, departmentID,
 	)
 	if err != nil {
 		return nil, err
@@ -55,6 +59,7 @@ func (sr *SupportRepositoryImpl) SelectSupport() ([]domain.SupportRequest, error
 			&support.ForumId,
 			&support.PostId,
 			&support.RequestContent,
+			&support.RequestDepartment,
 			&support.ProgressStatus,
 			&support.CreatedAt,
 			&support.UpdatedAt,
@@ -149,7 +154,7 @@ func (sr *SupportRepositoryImpl) CloseSupport(support domain.SupportRequest) (do
 func (sr *SupportRepositoryImpl) SelectSupportByForumIDAndStatus(forumID int, status domain.SupportRequestStatus) (*domain.SupportRequest, error) {
 	support := &domain.SupportRequest{}
 	err := sr.db.QueryRow(
-		`SELECT id, forum_id, post_id, request_content, progress_status, created_at, updated_at
+		`SELECT id, forum_id, post_id, request_content, request_department, progress_status, created_at, updated_at
 		 FROM support_requests WHERE forum_id = ? AND progress_status = ?`,
 		forumID, status,
 	).Scan(
@@ -157,6 +162,7 @@ func (sr *SupportRepositoryImpl) SelectSupportByForumIDAndStatus(forumID int, st
 		&support.ForumId,
 		&support.PostId,
 		&support.RequestContent,
+		&support.RequestDepartment,
 		&support.ProgressStatus,
 		&support.CreatedAt,
 		&support.UpdatedAt,

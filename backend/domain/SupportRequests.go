@@ -12,12 +12,13 @@ const (
 )
 
 type SupportRequest struct {
-	Id             int
-	ForumId        int
-	PostId         int
-	RequestContent string
-	CreatedBy      int
-	ProgressStatus SupportRequestStatus
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	Id                int
+	ForumId           int
+	PostId            int
+	RequestContent    string
+	RequestDepartment int
+	CreatedBy         int
+	ProgressStatus    SupportRequestStatus
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }

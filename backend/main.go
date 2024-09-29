@@ -61,7 +61,7 @@ func main() {
 	departmentUseCase := usecase.NewDepartmentUseCase(departmentRepo, jwtService)
 
 	supportRequestRepo := repository.NewSupportRepository(db)
-	supportRequestUseCase := usecase.NewSupportUseCase(supportRequestRepo, jwtService)
+	supportRequestUseCase := usecase.NewSupportUseCase(supportRequestRepo, userRepo, jwtService)
 
 	// ルートの設定（依存性注入）
 	r := router.SetupRouter(db, userUseCase, authUseCase, postUseCase, forumUseCase, courseUseCase, departmentUseCase, supportRequestUseCase, jwtService)
