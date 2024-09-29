@@ -27,6 +27,8 @@ func (su *SupportUseCaseImpl) NewSupportRequest(supportRequest *domain.SupportRe
 		return nil, errors.New("request content is required")
 	}
 
+	// そのforumに別のsupportRequestがないがチェック
+
 	// 初期状態を設定
 	supportRequest.ProgressStatus = domain.StatusInProgress
 
@@ -40,9 +42,9 @@ func (su *SupportUseCaseImpl) NewSupportRequest(supportRequest *domain.SupportRe
 }
 
 // サポートリクエストを取得
-func (su *SupportUseCaseImpl) GetSupportRequest(supportID int) (*domain.SupportRequest, error) {
+func (su *SupportUseCaseImpl) GetSupportRequest(forumID int) (*domain.SupportRequest, error) {
 	// 指定されたIDのサポートリクエストを取得
-	supportRequest, err := su.SupportRepository.SelectSupportByID(supportID)
+	supportRequest, err := su.SupportRepository.SelectSupportByForumIDAndStatus(forumID, domain.StatusInProgress)
 	if err != nil {
 		return nil, err
 	}
