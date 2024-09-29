@@ -162,6 +162,9 @@ func (sr *SupportRepositoryImpl) SelectSupportByForumIDAndStatus(forumID int, st
 		&support.UpdatedAt,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return support, nil

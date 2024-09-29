@@ -28,6 +28,11 @@ func (su *SupportUseCaseImpl) NewSupportRequest(supportRequest *domain.SupportRe
 	}
 
 	// そのforumに別のsupportRequestがないがチェック
+	if supportRequestCheck, err := su.SupportRepository.SelectSupportByForumIDAndStatus(supportRequest.ForumId, domain.StatusInProgress); err != nil {
+		return nil, err
+	} else if supportRequestCheck != nil {
+		return nil, errors.New("support request is exist")
+	}
 
 	// 初期状態を設定
 	supportRequest.ProgressStatus = domain.StatusInProgress

@@ -17,7 +17,7 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param        support_request  body      SupportRequestDto  true  "サポートリクエストデータ"
-// @Success      201   {object}  domain.SupportRequest
+// @Success      201   {object}  reqres.SupportRequestResponse
 // @Failure      400   {object}  map[string]string
 // @Router       /api/support_requests [post]
 func CreateSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase usecase.SupportUseCase) {
