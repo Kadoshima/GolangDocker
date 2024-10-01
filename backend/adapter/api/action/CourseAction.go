@@ -8,6 +8,15 @@ import (
 	"strconv"
 )
 
+// GetAllCourseInfoAction GetCourseHandler godoc
+// @Summary      コース情報をすべて取得します
+// @Description  全てのコース情報を取得します
+// @Tags         courses
+// @Accept       json
+// @Produce      json
+// @Success      200      {object}  []domain.Course
+// @Failure      404      {object}  map[string]string
+// @Router       /api/courses [get]
 func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usecase.CourseUseCase) {
 	//メソッドチェック
 	if r.Method != http.MethodGet {
@@ -33,7 +42,7 @@ func GetAllCourseInfoAction(w http.ResponseWriter, r *http.Request, useCase usec
 
 	w.Header().Set("Content-Type", "application/json")
 
-	if err := json.NewEncoder(w).Encode(courseMap); err != nil {
+	if err := json.NewEncoder(w).Encode(courses); err != nil {
 		reqres.WriteJSONErrorResponse(w, "Json encode error")
 	}
 

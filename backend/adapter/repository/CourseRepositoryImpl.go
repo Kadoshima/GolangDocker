@@ -15,20 +15,20 @@ func NewCourseRepository(db *sql.DB) *CourseRepositoryImpl {
 }
 
 // 全てのコースを取得
-func (cr *CourseRepositoryImpl) SelectAllCourse() ([]*domain.Course, error) {
-	rows, err := cr.db.Query("SELECT id, department_id, name FROM courses ORDER BY department_id DESC")
+func (cr *CourseRepositoryImpl) SelectAllCourse() ([]domain.Course, error) {
+	rows, err := cr.db.Query("SELECT id, department_id, name FROM courses ORDER BY department_id ASC, id ASC")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close() // rows を必ずクローズ
 
-	var courses []*domain.Course // スライスの要素はポインタ型
+	var courses []domain.Course // スライスの要素はポインタ型
 	for rows.Next() {
 		var course domain.Course
 		if err := rows.Scan(&course.ID, &course.DepartmentID, &course.Name); err != nil {
 			return nil, err
 		}
-		courses = append(courses, &course) // courseのポインタを追加
+		courses = append(courses, course) // courseのポインタを追加
 	}
 
 	// ループ終了後のエラーチェック
