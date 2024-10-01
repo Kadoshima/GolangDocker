@@ -27,9 +27,7 @@ definitions:
   domain.Forums:
     properties:
       attachments:
-        items:
-          type: string
-        type: array
+        type: string
       category:
         type: string
       createdAt:
@@ -58,9 +56,7 @@ definitions:
   domain.Post:
     properties:
       attachments:
-        items:
-          type: string
-        type: array
+        type: string
       content:
         type: string
       createdAt:
@@ -73,8 +69,6 @@ definitions:
         type: integer
       status:
         type: integer
-      tags:
-        type: string
       updatedAt:
         type: string
       userId:
@@ -160,6 +154,29 @@ paths:
       summary: コース情報を取得します
       tags:
       - course
+  /api/courses:
+    get:
+      consumes:
+      - application/json
+      description: 全てのコース情報を取得します
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Course'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: コース情報をすべて取得します
+      tags:
+      - courses
   /api/department/get:
     get:
       consumes:

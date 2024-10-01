@@ -65,6 +65,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/courses": {
+            "get": {
+                "description": "全てのコース情報を取得します",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "courses"
+                ],
+                "summary": "コース情報をすべて取得します",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Course"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/department/get": {
             "get": {
                 "description": "全ての学部の情報を取得します",
@@ -511,10 +546,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "attachments": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "category": {
                     "type": "string"
@@ -558,10 +590,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "attachments": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "content": {
                     "type": "string"
@@ -580,9 +609,6 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
-                },
-                "tags": {
-                    "type": "string"
                 },
                 "updatedAt": {
                     "type": "string"
