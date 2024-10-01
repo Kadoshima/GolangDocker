@@ -152,3 +152,50 @@ func GetDepartmentSupportRequests(w http.ResponseWriter, r *http.Request, useCas
 		return
 	}
 }
+
+// SupportIsCompleteAction godoc
+// @Summary      サポートリクエストを完了状態に更新します
+// @Description  指定されたサポートリクエストIDのステータスを解決済みに更新します
+// @Tags         support_request
+// @Accept       json
+// @Produce      json
+// @Param        support_id  query     int  true  "サポートリクエストID"
+// @Success      200       {object}  domain.SupportRequest
+// @Failure      400       {object}  map[string]string
+// @Router       /api/support_requests/complete [put]
+func SupportIsCompleteAction(w http.ResponseWriter, r *http.Request, useCase usecase.SupportUseCase) {
+
+	// メソッドチェック
+	if r.Method != http.MethodPut {
+		reqres.WriteJSONErrorResponse(w, "Invalid request method")
+		return
+	}
+
+	// クエリパラメータから support_id を取得
+	supportIDStr := r.URL.Query().Get("support_id")
+	if supportIDStr == "" {
+		reqres.WriteJSONErrorResponse(w, "support_id is required")
+		return
+	}
+
+	// support_id を整数に変換
+	supportID, err := strconv.Atoi(supportIDStr)
+	if err != nil {
+		reqres.WriteJSONErrorResponse(w, "Invalid support_id")
+		return
+	}
+
+	// ユースケースを呼び出してサポートリクエストを完了状態に更新
+	updatedSupportRequest, err := useCase.SupportIsComplete(supportID)
+	if err != nil {
+		reqres.WriteJSONErrorResponse(w, err.Error())
+		return
+	}
+
+	// 更新されたサポートリクエストをレスポンスとして返す
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(updatedSupportRequest); err != nil {
+		reqres.WriteJSONErrorResponse(w, err.Error())
+		return
+	}
+}
