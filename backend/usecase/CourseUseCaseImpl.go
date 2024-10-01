@@ -19,7 +19,7 @@ func NewCourseUseCase(repository repository.CourseRepository, jwtService *auth.J
 	return courseUseCaseImpl
 }
 
-func (ci CourseUseCaseImpl) GetAllCourseInfo() ([]*domain.Course, error) {
+func (ci CourseUseCaseImpl) GetAllCourseInfo() ([]domain.Course, error) {
 	// 全てのcourse情報を返す
 	courses, err := ci.CourseRepository.SelectAllCourse()
 	if err != nil {
