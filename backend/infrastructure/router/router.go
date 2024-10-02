@@ -18,6 +18,7 @@ func SetupRouter(db *sql.DB,
 	forumUseCase usecase.ForumUseCase,
 	courseUseCase usecase.CourseUseCase,
 	departmentUseCase usecase.DepartmentUseCase,
+	supportUseCase usecase.SupportUseCase,
 	jwtService *auth.JWTService,
 ) *http.ServeMux {
 
@@ -82,6 +83,24 @@ func SetupRouter(db *sql.DB,
 	mux.HandleFunc("/api/department/get", func(w http.ResponseWriter, r *http.Request) {
 		action.GetDepartmentAction(w, r, departmentUseCase) // useCaseをハンドラーに渡す
 	})
+
+	// support系
+	mux.Handle("/api/support/post", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.CreateSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	// 自分の所属する学部に当てられたsupportを全てもら
+	mux.Handle("/api/support/get", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.GetDepartmentSupportRequests(w, r, supportUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	mux.Handle("/api/support/complete", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.SupportIsCompleteAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	mux.Handle("/api/support/close", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.CloseSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
+	})))
 
 	return mux
 }

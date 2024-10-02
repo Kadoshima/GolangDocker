@@ -60,8 +60,11 @@ func main() {
 	departmentRepo := repository.NewDepartmentRepository(db)
 	departmentUseCase := usecase.NewDepartmentUseCase(departmentRepo, jwtService)
 
+	supportRequestRepo := repository.NewSupportRepository(db)
+	supportRequestUseCase := usecase.NewSupportUseCase(supportRequestRepo, userRepo, jwtService)
+
 	// ルートの設定（依存性注入）
-	r := router.SetupRouter(db, userUseCase, authUseCase, postUseCase, forumUseCase, courseUseCase, departmentUseCase, jwtService)
+	r := router.SetupRouter(db, userUseCase, authUseCase, postUseCase, forumUseCase, courseUseCase, departmentUseCase, supportRequestUseCase, jwtService)
 	log.Println("Starting server on :8000")
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatalf("Could not start server: %v", err)
