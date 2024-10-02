@@ -81,27 +81,27 @@ func CreateSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase 
 func CloseSupportRequestAction(w http.ResponseWriter, r *http.Request, useCase usecase.SupportUseCase) {
 
 	// メソッドチェック
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodPut {
 		reqres.WriteJSONErrorResponse(w, "Invalid request method")
 		return
 	}
 
 	// クエリパラメータから forum_id を取得
-	forumIDStr := r.URL.Query().Get("forum_id")
-	if forumIDStr == "" {
-		reqres.WriteJSONErrorResponse(w, "forum_id is required")
+	supportIDStr := r.URL.Query().Get("support_id")
+	if supportIDStr == "" {
+		reqres.WriteJSONErrorResponse(w, "support_id is required")
 		return
 	}
 
 	// forum_id を整数に変換
-	forumID, err := strconv.Atoi(forumIDStr)
+	supportID, err := strconv.Atoi(supportIDStr)
 	if err != nil {
 		reqres.WriteJSONErrorResponse(w, "Invalid forum_id")
 		return
 	}
 
 	// ユースケースを呼び出してサポートリクエストをクローズ
-	closedSupportRequest, err := useCase.CloseSupportRequest(forumID)
+	closedSupportRequest, err := useCase.CloseSupportRequest(supportID)
 	if err != nil {
 		reqres.WriteJSONErrorResponse(w, err.Error())
 		return

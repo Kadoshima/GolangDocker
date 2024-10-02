@@ -94,12 +94,12 @@ func SetupRouter(db *sql.DB,
 		action.GetDepartmentSupportRequests(w, r, supportUseCase) // useCaseをハンドラーに渡す
 	})))
 
-	mux.Handle("/api/support/close", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		action.CloseSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
-	})))
-
 	mux.Handle("/api/support/complete", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		action.SupportIsCompleteAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
+	})))
+
+	mux.Handle("/api/support/close", middleware.JWTMiddleware(jwtService)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action.CloseSupportRequestAction(w, r, supportUseCase) // useCaseをハンドラーに渡す
 	})))
 
 	return mux

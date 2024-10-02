@@ -85,7 +85,12 @@ func (su *SupportUseCaseImpl) SupportIsComplete(supportID int) (*domain.SupportR
 	// 指定されたIDのサポートリクエストを取得
 	supportRequest, err := su.SupportRepository.SelectSupportByID(supportID)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("this support request is not found")
+	}
+
+	// 既に解決またはクローズされている場合はエラーを返す
+	if supportRequest.ProgressStatus == domain.StatusResolved || supportRequest.ProgressStatus == domain.StatusClosed {
+		return nil, errors.New("this support request is done")
 	}
 
 	// ステータスを更新
@@ -101,17 +106,17 @@ func (su *SupportUseCaseImpl) SupportIsComplete(supportID int) (*domain.SupportR
 }
 
 // サポートリクエストをクローズする
-func (su *SupportUseCaseImpl) CloseSupportRequest(forumID int) (*domain.SupportRequest, error) {
+func (su *SupportUseCaseImpl) CloseSupportRequest(supportID int) (*domain.SupportRequest, error) {
 
-	// forumIDとStatusInProgressからsupportRequestを検索する
-	supportRequest, err := su.SupportRepository.SelectSupportByForumIDAndStatus(forumID, domain.StatusInProgress)
+	// 指定されたIDのサポートリクエストを取得
+	supportRequest, err := su.SupportRepository.SelectSupportByID(supportID)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("this support request is not found")
 	}
 
 	// 既に解決またはクローズされている場合はエラーを返す
 	if supportRequest.ProgressStatus == domain.StatusResolved || supportRequest.ProgressStatus == domain.StatusClosed {
-		return nil, errors.New("このサポートリクエストは既に解決またはクローズされています")
+		return nil, errors.New("this support request is done")
 	}
 
 	// ステータスをクローズに更新
