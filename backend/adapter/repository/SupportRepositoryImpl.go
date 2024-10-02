@@ -105,7 +105,7 @@ func (sr *SupportRepositoryImpl) CompleteSupport(support domain.SupportRequest) 
 
 	_, err := sr.db.Exec(
 		`UPDATE support_requests SET progress_status = ?, updated_at = ? WHERE id = ?`,
-		support.ProgressStatus, support.UpdatedAt, support.Id,
+		domain.StatusResolved, support.UpdatedAt, support.Id,
 	)
 	if err != nil {
 		return support, err
