@@ -1,20 +1,38 @@
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('コンピュータサイエンス勉強会','コンピュータサイエンスに興味のある学生のための掲示板です。',1,1,0,'コンピュータサイエンス','["syllabus.pdf", "project_outline.docx"]','[2,3]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('物理学クラブディスカッション','最新の物理学研究や理論について議論しましょう。',2,1,0,'物理学',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('数学問題解決','挑戦的な数学の問題を共有し、解決しましょう。',3,1,0,'数学',NULL,'[4]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('工学プロジェクト協力','学科を超えて工学プロジェクトで協力しましょう。',4,1,0,'工学','["blueprints.zip"]','[1,5]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('語学交換','他の学生と語学を練習・交換しましょう。',5,1,0,'語学',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('生物学研究フォーラム','生物学の研究や発見について議論しましょう。',1,1,0,'生物学',NULL,'[2]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('アートとデザインのショーケース','あなたのアートやデザインのプロジェクトを共有しましょう。',2,1,0,'アート・デザイン','["artwork1.jpg", "design_concept.pdf"]',NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('化学実験技術','化学の実験技術や実験について議論しましょう。',3,1,0,'化学',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('環境科学ディスカッション','環境問題やその解決策について話し合いましょう。',4,1,0,'環境科学',NULL,'[5]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('心理学と心の探求','心理学に関連するトピックを探求しましょう。',5,1,0,'心理学',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('歴史愛好家の集い','歴史的な出来事とその影響について議論しましょう。',1,1,0,'歴史',NULL,'[3]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('ビジネスと経済学','ビジネス戦略や経済理論についての洞察を共有しましょう。',2,1,0,'ビジネス・経済学',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('スポーツクラブ連携','様々なスポーツクラブの活動を調整しましょう。',3,1,0,'スポーツ',NULL,'[1,2]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('音楽プロダクション','音楽制作の技術について議論し、協力しましょう。',4,1,0,'音楽','["track_samples.mp3"]',NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('文学クラブ','文学作品を共有し、議論しましょう。',5,1,0,'文学',NULL,'[4]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('映画とメディア研究','映画やメディアを分析し、議論しましょう。',1,1,0,'メディア研究',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('哲学と倫理学','哲学的な議論や倫理的な問題について議論しましょう。',2,1,0,'哲学',NULL,'[5]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('国際学生交流','国際的な学生とつながりましょう。',3,1,0,'国際交流',NULL,NULL);
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('ロボット工学とAI','ロボット工学や人工知能のプロジェクトについて議論しましょう。',4,1,0,'ロボット工学・AI','["ai_research_paper.pdf"]','[1,3]');
-INSERT INTO forums (title,description,created_by,status,visibility,category,attachments,moderators) VALUES ('ヘルスケアの革新','ヘルスケアにおける革新的なアイデアを共有しましょう。',5,1,0,'ヘルスケア',NULL,NULL);
+-- 修正済みの forums テーブルへの INSERT クエリ
+INSERT INTO forums (
+    id,
+    title,
+    description,
+    created_by,
+    status,
+    visibility,
+    category,
+    num_posts,
+    attachments,
+    moderators,
+    created_at,
+    updated_at
+) VALUES
+      (11, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (22, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (23, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (33, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (24, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (25, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (26, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (27, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (34, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (45, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (46, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (47, '新機能提案', 'プラットフォームの新機能に関する提案。', 11, 1, 1, '提案', 5, NULL, '[11,12]', '2024-10-10 19:35:00', '2024-10-10 19:35:00'),
+      (48, 'オフ会情報', 'オフラインミーティングや交流会の情報交換。', 12, 0, 1, '交流', 12, 'meetup_schedule.pdf', '[12]', '2024-10-10 20:50:00', '2024-10-10 20:50:00'),
+      (49, 'トラブルシューティング', '問題解決のためのディスカッションフォーラム。', 13, 1, 1, 'トラブル', 20, NULL, '[13,14]', '2024-10-10 21:15:00', '2024-10-10 21:15:00'),
+      (55, 'ニュース速報', '最新のニュースやアップデートを共有。', 11, 1, 1, 'ニュース', 18, 'news_updates.pdf', '[11]', '2024-10-10 22:30:00', '2024-10-10 22:30:00'),
+      (56, 'フィードバック募集', NULL, 12, 0, 0, NULL, 0, NULL, NULL, '2024-10-10 23:45:00', '2024-10-10 23:45:00'),
+
+      -- 異なるシナリオをカバーする例
+      (16, 'プロジェクトアイデア', '新しいプロジェクトのアイデアを共有・議論。', 13, 1, 1, 'アイデア', 7, 'project_ideas.docx', '[13,14]', '2024-10-11 08:00:00', '2024-10-11 08:00:00'),
+      (17, 'FAQセクション', 'よくある質問とその回答を掲載。', 14, 1, 1, 'FAQ', 50, 'faq_document.pdf', '[14]', '2024-10-11 09:15:00', '2024-10-11 09:15:00'),
+      (18, 'ベータテスト', '新機能のベータテストに参加するユーザーのためのフォーラム。', 15, 0, 1, 'テスト', 3, NULL, '[15,16]', '2024-10-11 10:30:00', '2024-10-11 10:30:00'),
+      (19, '成功事例', '成功したプロジェクトや取り組みの事例を共有。', 16, 1, 1, '事例', 22, 'success_stories.pdf', '[16]', '2024-10-11 11:45:00', '2024-10-11 11:45:00'),
+      (20, 'ガバナンス', 'フォーラムの運営やルールに関する議論。', 16, 1, 1, '運営', 9, 'governance_rules.docx', '[16]', '2024-10-11 13:00:00', '2024-10-11 13:00:00');
