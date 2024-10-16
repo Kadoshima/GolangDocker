@@ -18,16 +18,46 @@ package main
 import (
 	"backend/adapter/repository"
 	_ "backend/docs"
+	"backend/infrastructure"
 	"backend/infrastructure/auth"
 	"backend/infrastructure/database"
 	"backend/infrastructure/router"
 	"backend/migrations"
+	"backend/service"
 	"backend/usecase"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 func main() {
+
+	// 環境変数を呼び出し @1
+	endpoint, ok := os.LookupEnv("ENDPOINT")
+	if !ok {
+		fmt.Println("ENDPOINT is not set")
+	}
+	accessKeyID, ok := os.LookupEnv("ACCESS_KEY_ID")
+	if !ok {
+		fmt.Println("ACCESS_KEY_ID is not set")
+	}
+	secretAccessKey, ok := os.LookupEnv("SECRET_ACCESS_KEY")
+	if !ok {
+		fmt.Println("SECRET_ACCESS_KEY is not set")
+	}
+	useSSLStr, ok := os.LookupEnv("USE_SSL")
+	if !ok {
+		fmt.Println("USE_SSL is not set")
+	}
+	bucketName, ok := os.LookupEnv("BUCKET_NAME")
+	if !ok {
+		fmt.Println("BUCKET_NAME is not set")
+	}
+
+	//useSSLをboolにconvert
+	useSSL, _ := strconv.ParseBool(useSSLStr)
 
 	// DB初期化
 	db, err := database.NewDB()
@@ -36,17 +66,24 @@ func main() {
 	}
 	defer db.Close()
 
+	// MinIO初期化
+	minioClient, err := infrastructure.NewMinio(endpoint, accessKeyID, secretAccessKey, bucketName, useSSL)
+	if err != nil {
+		log.Fatalf("Could not connect = %v", err)
+	}
+
 	// DBマイグレーション
 	migrations.Migrate()
 
 	// JWTServiceの初期化
 	jwtService := auth.NewJWTService("your-secret-key")
+	minioService := service.NewMinioService(minioClient, bucketName)
 
 	userRepo := repository.NewUserRepository(db)
 	userUseCase := usecase.NewUserUseCase(userRepo)
 
 	authRepo := repository.NewAuthRepository(db)
-	authUseCase := usecase.NewAuthUseCase(authRepo, jwtService)
+	authUseCase := usecase.NewAuthUseCase(authRepo, minioService, jwtService)
 
 	forumRepo := repository.NewForumRepository(db)
 	forumUseCase := usecase.NewForumUseCase(forumRepo, jwtService)
@@ -62,7 +99,6 @@ func main() {
 
 	// ルートの設定（依存性注入）
 	r := router.SetupRouter(db, userUseCase, authUseCase, postUseCase, forumUseCase, courseUseCase, departmentUseCase, jwtService)
-	log.Println("Starting server on :8000")
 	if err := http.ListenAndServe(":8000", r); err != nil {
 		log.Fatalf("Could not start server: %v", err)
 	}

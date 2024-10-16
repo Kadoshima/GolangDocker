@@ -3,19 +3,21 @@ package usecase
 import (
 	"backend/adapter/repository"
 	"backend/infrastructure/auth"
+	"backend/service"
 	"errors"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthUseCaseImpl struct {
 	AuthRepository repository.AuthRepository
+	MinioService   service.MinioService
 	JWTService     *auth.JWTService
 }
 
-func NewAuthUseCase(authRepository repository.AuthRepository, jwtService *auth.JWTService) *AuthUseCaseImpl {
+func NewAuthUseCase(authRepository repository.AuthRepository, minioService service.MinioService, jwtService *auth.JWTService) AuthUseCase {
 	return &AuthUseCaseImpl{
 		AuthRepository: authRepository,
+		MinioService:   minioService,
 		JWTService:     jwtService,
 	}
 }
