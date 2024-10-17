@@ -9,6 +9,8 @@ services:
       - ./backend:/app
     depends_on:
       - db
+    networks:
+      - app-network
   
   db:
     image: mysql:8.0
@@ -24,6 +26,8 @@ services:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - app-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -36,6 +40,12 @@ services:
       - PMA_PORT=3306
     depends_on:
       - db
+    networks:
+      - app-network
 
 volumes:
   db_data:
+
+networks:
+  app-network:
+    external: true
